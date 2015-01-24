@@ -64,8 +64,6 @@
         scenario: scenario
       });
 
-      // TODO: Set up the scenario and distribute cards to players
-
       this.set( "state", Game.State.ShowScenarioChoices );
     },
 
