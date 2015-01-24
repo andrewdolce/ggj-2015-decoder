@@ -132,9 +132,24 @@
 
       switch (state) {
       case Game.State.PreTurn:
+        this.$midturn.hide();
+        this.$preturn.show();
+
+        var turnsLeftMessage;
+        var turnsLeft = game.numberOfTurnsLeft();
+        if (turnsLeft > 1) {
+          turnsLeftMessage = 'Only ' + turnsLeft + ' turns left.';
+        } else {
+          turnsLeftMessage = 'Last turn!';
+        }
+
         this.$preturn.html(preturnTemplate({
+          turnsLeftMessage: turnsLeftMessage,
+          currentSentence: game.currentSentence(),
+          prompt: game.get( 'scenario' ).get( 'prompt' ),
           playerNumber: currentPlayerId + 1
         }));
+        $('#preturn-button').on( 'click', game.beginMidTurn.bind(game));
         this.$playerDecks.addClass('dc-inactive-player');
         break;
       case Game.State.MidTurn:
@@ -142,9 +157,8 @@
           .removeClass('dc-inactive-player')
           .find('.dc-card')
           .addClass('dc-active-card');
-        break;
-      case Game.State.PostTurn:
-        this.$playerDecks.addClass('dc-inactive-player');
+        this.$preturn.hide();
+        this.$midturn.show();
         break;
       }
     };
