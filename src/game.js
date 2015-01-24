@@ -45,13 +45,23 @@
 
     finishPlayerSetup: function( numberOfPlayers ) {
       var numberOfTurns = numberOfPlayers * 3; // Decide how we determine this
+
+      var scenario = new Scenario();
+      var cardGroups = scenario.generateCardGroups(numberOfPlayers);
+
       var players = [];
       for (var i = 0; i < numberOfPlayers; i++) {
-        players.push(new Player());
+        var player = new Player({
+          identifier: i
+        });
+        player.addCardsToHand(cardGroups[i]);
+        players.push(player);
       }
+
       this.set({
         numberOfTurns: numberOfTurns,
-        players: players
+        players: players,
+        scenario: game
       });
 
       // TODO: Set up the scenario and distribute cards to players
@@ -85,7 +95,7 @@
 
     beginPostTurn: function( sharedCard, cardsOnBoard ) {
       var player = this.currentPlayer();
-      player.shareCard( sharedCard );
+      player.playCardFromHand( sharedCard );
       this.set( "cardsOnBoard", cardsOnBoard );
       this.set( "state", Game.State.PostTurn );
     },
