@@ -32,7 +32,7 @@
         game.beginFinalChoice();
         game.lockInDecision( 0 );
       }
-    }, 1);
+    }, 50);
   });
 
   game.beginPlayerSetup();

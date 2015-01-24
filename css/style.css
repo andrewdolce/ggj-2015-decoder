@@ -25,3 +25,7 @@ ul.dc-deck-root {
 .dc-deck-root .dc-card:nth-child(1) {
     margin-left: 0px;
 }
+
+.dc-player-hand.dc-inactive-player {
+    display: none;
+}
