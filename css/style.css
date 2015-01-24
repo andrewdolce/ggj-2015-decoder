@@ -1,0 +1,9 @@
+.dc-deck {
+    min-height: 180px;
+}
+
+.dc-deck > p {
+    font-size: 48px;
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
