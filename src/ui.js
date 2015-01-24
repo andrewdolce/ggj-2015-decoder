@@ -1,11 +1,12 @@
 (function() {
   var UI = function(game) {
     this.game = game;
+    this.$preturn  = $('#dc-preturn');
+    this.$midturn  = $('#dc-midturn');
+    this.$postturn = $('#dc-postturn');
     this.cardViews = [];
-    this.$decks = $('.dc-deck-container');
-    this._initDecks();
-    this.$deckRoots = $('.dc-deck-root');
 
+    this._initDecks();
     this._init();
 
     this.$deckRoots.sortable({
@@ -18,6 +19,7 @@
   UI.RETARGET_ROOT_ELEMENT = UI.prototype.RETARGET_ROOT_ELEMENT = 'ol';
 
   UI.prototype._initDecks = function() {
+    this.$decks = $('.dc-deck-container');
     this.$decks.each(function() {
       var retargetRootElement = UI.RETARGET_ROOT_ELEMENT + ':first-of-type';
       var $retargetRoot = $(this).find(retargetRootElement);
@@ -38,16 +40,31 @@
 
       this.$__retargetRoot = $retargetRoot;
     });
+    this.$deckRoots = $('.dc-deck-root');
   };
 
   UI.prototype._init = function() {
     this.game.on('change:state', function(game, state) {
       if (state === Game.State.ShowScenarioChoices) {
-        this._initCards;
+        this._initPlayers();
+        this._initCards();
       }
     }, this);
     this.game.on('change:state', this.syncCards, this);
   };
+
+  UI.prototype._initPlayers = (function() {
+    var source = $('#player-hand-template').html();
+    var template = Handlebars.compile(source);
+
+    return function() {
+      $('.dc-player-hand').remove();
+      this.game.get('players').forEach(function(player) {
+        $(template(player.attributes)).appendTo(this.$midturn);
+      }, this);
+      this._initDecks();
+    };
+  }());
 
   UI.prototype._initCards = function() {
     this.game

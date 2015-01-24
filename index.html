@@ -19,9 +19,6 @@
         <div id="board" class="dc-deck-container">
           <ol class="jumbotron"></ol>
         </div>
-        <div id="player-0" class="dc-deck-container">
-          <ol class="jumbotron"></ol>
-        </div>
       </div>
       <div id="dc-postturn">
       </div>
@@ -36,6 +33,18 @@
 
     <script id="card-view-template" type="text/x-handlebars-template">
       <li><span class="label label-default">{{text}}</span></li>
+    </script>
+
+    <script id="board-template" type="text/x-handlebars-template">
+      <div id="board" class="dc-deck-container">
+        <ol class="jumbotron"></ol>
+      </div>
+    </script>
+
+    <script id="player-hand-template" type="text/x-handlebars-template">
+      <div id="player-{{identifier}}" class="dc-deck-container dc-player-hand">
+        <ol class="jumbotron"></ol>
+      </div>
     </script>
 
     <!-- Model -->
