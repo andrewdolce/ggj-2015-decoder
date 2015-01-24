@@ -5,9 +5,13 @@
 
   var Scenario = Backbone.Model.extend({
     defaults: {
-      "rawSentence": 'This is Sparta, not Athens!',
+      "rawSentence": 'The dinosaur is vicious, hungry, and very fast, but it can only see things that are moving.',
       "cards": [],
-      "prompt": "Do or do not?"
+      "prompt": "Should we run?",
+      "choices": [ "Run!", "Don't run!" ],
+      "outcomes": [ "You run. The dinosaur chases you down and eats you!",
+                    "You do not run. The dinosaur doesn't see you, and wonders off."
+                  ]
     },
 
     generateCardGroups: function(numberOfGroups) {
@@ -28,10 +32,10 @@
       }
 
       var shuffledCards = _.shuffle(cardModels);
-      for (var i = 0; i < cardModels.length; i++) {
+      for (var i = 0; i < shuffledCards.length; i++) {
         var groupIndex = i % numberOfGroups;
         var group = groups[groupIndex];
-        group.push(cardModels[i]);
+        group.push(shuffledCards[i]);
       }
 
       return groups;
