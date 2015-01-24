@@ -32,10 +32,10 @@
       }
 
       var shuffledCards = _.shuffle(cardModels);
-      for (var i = 0; i < cardModels.length; i++) {
+      for (var i = 0; i < shuffledCards.length; i++) {
         var groupIndex = i % numberOfGroups;
         var group = groups[groupIndex];
-        group.push(cardModels[i]);
+        group.push(shuffledCards[i]);
       }
 
       return groups;
