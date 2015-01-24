@@ -71,7 +71,5 @@
     });
 
     game.trigger('update_cards');
-
-    window.game = game;
   }());
 }());

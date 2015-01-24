@@ -1,5 +1,6 @@
 (function() {
   var game = new Game();
+  window.game = game;
 
   // This would get replaced by UI / controllers
   game.on( "change:state", function(game, state) {
