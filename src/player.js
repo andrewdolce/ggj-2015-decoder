@@ -4,6 +4,10 @@
       "name": "Unnamed Player",
       "unsharedCards": [],
       "sharedCards": []
+    },
+
+    shareCard: function( card ) {
+      // TODO
     }
   });
 

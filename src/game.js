@@ -14,9 +14,9 @@
                ];
 
   var State = {};
-  for (var i = 0; i < states; i++) {
+  for (var i = 0; i < states.length; i++) {
     var stateName = states[ i ];
-    Game.State[ stateName ] = stateName;
+    State[ stateName ] = stateName;
   }
 
   var Game = Backbone.Model.extend({
@@ -29,44 +29,60 @@
       "state": State.Uninitialized
     },
 
+    // Accessors
+    currentPlayer: function() {
+      var turn = this.get( "currentTurn" );
+      var players = this.get( "players" );
+      var currentPlayerIndex = turn % players.length;
+      return players[ currentPlayerIndex ];
+    },
+
     beginPlayerSetup: function() {
       this.set( "state", Game.State.PlayerSetup );
     },
 
     finishPlayerSetup: function( numberOfPlayers ) {
-      // TODO: Generate players and scenario
-      this.beginNextTurn();
+      var numberOfTurns = numberOfPlayers * 3; // Decide how we determine this
+      var players = [];
+      for (var i = 0; i < numberOfPlayers; i++) {
+        players.push(new Player());
+      }
+      this.set({
+        numberOfTurns: numberOfTurns,
+        players: players
+      });
+
+      // TODO: Set up the scenario and distribute cards to players
+
+      this.set( "state", Game.State.ShowScenarioChoices );
     },
 
     beginNextTurn: function() {
       var turn = this.get( "currentTurn" ) + 1;
-      this.set( "turn", turn );
+      this.set( "currentTurn", turn );
 
       if ( turn < this.get( "numberOfTurns" )) {
         this.beginPreTurn();
       } else {
         this.beginOpinionPhase();
       }
-    }
+    },
 
     beginPreTurn: function() {
-      var turn = this.get( "turn" );
-      var players = this.get( "players" );
-      var currentPlayerIndex = turn % players.length;
-
-      var currentPlayer = players[ currentPlayerIndex ];
-      console.log( "*** Starting turn:", turn);
-      console.log( "Player", currentPlayer.name, "take the screen! Everyone else look away!" );
+      var currentPlayer = this.currentPlayer();
+      console.log( "*** Starting turn:", this.get( "currentTurn" ));
+      console.log( "Player", currentPlayer.get( "name" ), "take the screen! Everyone else look away!" );
 
       this.set( "state", Game.State.PreTurn );
     },
 
     beginMidTurn: function() {
       // Not sure that we need anything else here
-      this.set( "state", Game.Start.MidTurn );
+      this.set( "state", Game.State.MidTurn );
     },
 
-    beginPostTurn: function( player, sharedCard, cardsOnBoard ) {
+    beginPostTurn: function( sharedCard, cardsOnBoard ) {
+      var player = this.currentPlayer();
       player.shareCard( sharedCard );
       this.set( "cardsOnBoard", cardsOnBoard );
       this.set( "state", Game.State.PostTurn );
