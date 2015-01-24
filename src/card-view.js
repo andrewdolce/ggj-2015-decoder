@@ -26,7 +26,13 @@
 
     appendToOwner: function() {
       var owner = this.model.get('owner');
-      var selector = '#' + owner;
+      var selector;
+      if (this.model.isInHand()) {
+        var id = owner.get( 'identifier' );
+        selector = '#player-' + id;
+      } else {
+        selector = '#board';
+      }
       return this.appendToDeck(selector);
     }
   });
