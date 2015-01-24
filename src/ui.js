@@ -10,12 +10,6 @@
 
     this._initDecks();
     this._init();
-
-    this.$deckRoots.sortable({
-      connectWith: '.dc-deck-root',
-      scroll: false,
-      revert: 300
-    }).disableSelection();
   };
 
   UI.RETARGET_ROOT_ELEMENT = UI.prototype.RETARGET_ROOT_ELEMENT = 'ol';
@@ -44,6 +38,42 @@
     });
     this.$deckRoots = $('.dc-deck-root');
     this.$playerDecks = $('.dc-player-hand');
+    this.updateSortable();
+  };
+
+  UI.prototype.updateSortable = function() {
+    var self = this;
+    this.$deckRoots.sortable({
+      connectWith: '.dc-deck-root',
+      // items: '> li.dc-active-card',
+      scroll: false,
+      revert: 300,
+
+      receive: function(event, ui) {
+        var normalLabelClass = 'label-default';
+        var disabledLabelClass = 'label-warning';
+
+        if ($(this).parent().attr('id') == 'board') {
+          if (ui.item.hasClass('dc-active-card')) {
+            self.$playerDecks.find('.dc-card')
+              .removeClass('dc-active-card')
+              .find('> span')
+              .removeClass(normalLabelClass)
+              .addClass(disabledLabelClass);
+          } else {
+            $(ui.sender).sortable('cancel');
+          }
+        } else {
+          if (ui.item.hasClass('dc-active-card')) {
+            self.$playerDecks.find('.dc-card')
+              .addClass('dc-active-card')
+              .find('> span')
+              .removeClass(disabledLabelClass)
+              .addClass(normalLabelClass);
+          }
+        }
+      }
+    }).disableSelection();
   };
 
   UI.prototype._init = function() {
@@ -108,7 +138,10 @@
         this.$playerDecks.addClass('dc-inactive-player');
         break;
       case Game.State.MidTurn:
-        $('#player-' + currentPlayerId).removeClass('dc-inactive-player');
+        $('#player-' + currentPlayerId)
+          .removeClass('dc-inactive-player')
+          .find('.dc-card')
+          .addClass('dc-active-card');
         break;
       case Game.State.PostTurn:
         this.$playerDecks.addClass('dc-inactive-player');
