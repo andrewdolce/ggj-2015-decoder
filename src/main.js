@@ -1,12 +1,21 @@
 (function() {
-  $('#hand span, #board span').addClass('dc-card');
+  var retargetRootElement = 'p';
+  var cardElement = 'span';
+  var cardSelector = ['#hand', '#board'].map(function(idSelector) {
+    return idSelector + ' ' + cardElement;
+  }).join(', ');
+
+  $(cardSelector)
+    .addClass('dc-card');
+
   $('#hand, #board')
     .addClass('dc-deck-container')
     .each(function() {
-      var retargetRootSelector = 'p:first-of-type';
+      var retargetRootSelector = retargetRootElement + ':first-of-type';
       var $retargetRoot = $(this).find(retargetRootSelector);
       if (!$retargetRoot.length) {
-        $retargetRoot = $('<p>').appendTo(this);
+        $retargetRoot = $('<' + retargetRootElement + '>')
+          .appendTo(this);
       }
       $retargetRoot.addClass('dc-deck-root');
       this.$__retargetRoot = $retargetRoot;
