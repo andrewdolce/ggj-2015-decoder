@@ -6,7 +6,6 @@
                  "ShowScenarioChoices",
                  "PreTurn",
                  "MidTurn",
-                 "PostTurn",
                  "OpinionPhase",
                  "VotingPhase",
                  "FinalChoice",
@@ -39,6 +38,20 @@
       return players[ currentPlayerIndex ];
     },
 
+    currentSentence: function() {
+      var cards = this.get( 'cardsOnBoard' );
+      return cards
+        .map(function(card) {
+          return card.get('text');
+        })
+        .join(' ');
+    },
+
+    numberOfTurnsLeft: function() {
+      return this.get('numberOfTurns') - this.get('currentTurn');
+    },
+
+    // State changes
     beginPlayerSetup: function() {
       this.set( "state", Game.State.PlayerSetup );
     },
@@ -87,11 +100,11 @@
       this.set( "state", Game.State.MidTurn );
     },
 
-    beginPostTurn: function( sharedCard, cardsOnBoard ) {
+    finalizeTurn: function( sharedCard, cardsOnBoard ) {
       var player = this.currentPlayer();
       player.playCardFromHand( sharedCard );
       this.set( "cardsOnBoard", cardsOnBoard );
-      this.set( "state", Game.State.PostTurn );
+      self.beginNextTurn();
     },
 
     beginOpinionPhase: function() {
