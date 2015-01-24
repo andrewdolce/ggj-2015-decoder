@@ -21,9 +21,9 @@
       game.beginPostTurn( dummyCard, dummyCardsInOrder );
     } else if (state == Game.State.PostTurn) {
       game.beginNextTurn();
-    } else if (state == Game.State.OpinionPhase ) {
+    } else if (state == Game.State.OpinionPhase) {
       game.beginVotingPhase();
-    } else if (state == Game.State.FinalChoice ) {
+    } else if (state == Game.State.FinalChoice) {
       game.beginFinalChoice();
       game.lockInDecision( 0 );
     }
