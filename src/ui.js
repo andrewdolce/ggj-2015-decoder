@@ -1,75 +1,72 @@
 (function() {
-  var retargetRootElement = 'ol';
-  var cardElement = 'li';
-  var cardSelector = ['#hand', '#board'].map(function(idSelector) {
-    return idSelector + ' ' + cardElement;
-  }).join(', ');
+  var UI = function(game) {
+    this.game = game;
+    this.cardViews = [];
+    this.$decks = $('.dc-deck-container');
+    this._initDecks();
+    this.$deckRoots = $('.dc-deck-root');
 
-  $(cardSelector)
-    .addClass('dc-card');
+    this._init();
 
-  $('#hand, #board')
-    .addClass('dc-deck-container')
-    .each(function() {
-      var retargetRootSelector = retargetRootElement + ':first-of-type';
-      var $retargetRoot = $(this).find(retargetRootSelector);
-      if (!$retargetRoot.length) {
-        $retargetRoot = $('<' + retargetRootElement + '>')
-          .appendTo(this);
-      }
-      $retargetRoot.addClass('dc-deck-root');
-      this.$__retargetRoot = $retargetRoot;
-    });
-
-  // Clean out any extraneous text nodes between cards.
-  $('.dc-deck-container .dc-deck-root')
-    .contents()
-    .filter(function() {
-      return this.nodeType === 3; // TEXT_NODE
-    })
-    .remove();
-
-  $('.dc-deck-root').sortable({
-    connectWith: '.dc-deck-root',
-    scroll: false,
-    revert: 300
-  }).disableSelection();
-
-  var stripPunctuation = function(string) {
-    return string.replace(/[,:;\-–.!]/g, '');
+    this.$deckRoots.sortable({
+      connectWith: '.dc-deck-root',
+      scroll: false,
+      revert: 300
+    }).disableSelection();
   };
 
-  (function() {
-    var card = new Card({
-      text: 'Athens'
+  UI.RETARGET_ROOT_ELEMENT = UI.prototype.RETARGET_ROOT_ELEMENT = 'ol';
+
+  UI.prototype._initDecks = function() {
+    this.$decks.each(function() {
+      var retargetRootElement = UI.RETARGET_ROOT_ELEMENT + ':first-of-type';
+      var $retargetRoot = $(this).find(retargetRootElement);
+      if (!$retargetRoot.length) {
+        $retargetRoot = $('<' + UI.RETARGET_ROOT_ELEMENT + '>')
+          .appendTo(this);
+      }
+
+      $retargetRoot
+        .addClass('dc-deck-root')
+
+        // Clean out extraneous text nodes.
+        .contents()
+        .filter(function() {
+          return this.nodeType === 3; // TEXT_NODE
+        })
+        .remove();
+
+      this.$__retargetRoot = $retargetRoot;
     });
-    var cardView = new CardView({
-      model: card
+  };
+
+  UI.prototype._init = function() {
+    this.game.on('change:state', function(game, state) {
+      if (state === Game.State.ShowScenarioChoices) {
+        this._initCards;
+      }
+    }, this);
+    this.game.on('change:state', this.syncCards, this);
+  };
+
+  UI.prototype._initCards = function() {
+    this.game
+      .get('scenario')
+      .get('cards')
+      .forEach(this.addCard.bind(this));
+  };
+
+  UI.prototype.syncCards = function() {
+    this.cardViews.forEach(function forEachCardView(cardView) {
+      cardView.render().appendToOwner();
     });
+  };
 
-    var game = new Game();
-    var views = [];
+  UI.prototype.addCard = function(model) {
+    this.cardViews.push(new CardView({
+      model: model
+    }));
+  };
 
-    var cardModels = stripPunctuation('This is Sparta, not Athens!')
-        .split(' ')
-        .map(function(word) {
-          var card = new Card({
-            text: word,
-            owner: 'board'
-          });
-          views.push(new CardView({
-            model: card
-          }));
-          return card;
-        });
-    game.set('cardsOnBoard', cardModels);
-
-    game.on('update_cards', function() {
-      views.forEach(function(cardView) {
-        cardView.render().appendToOwner();
-      });
-    });
-
-    game.trigger('update_cards');
-  }());
+  window.UI = UI;
 }());
