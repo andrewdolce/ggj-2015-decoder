@@ -29,3 +29,7 @@ ul.dc-deck-root {
 .dc-player-hand.dc-inactive-player {
     display: none;
 }
+
+.dc-inactive-turn-ui {
+    display: none;
+}

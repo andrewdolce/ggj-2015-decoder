@@ -195,8 +195,8 @@
 
       switch (state) {
       case Game.State.PreTurn:
-        this.$midturn.hide();
-        this.$preturn.show();
+        this.$midturn.addClass('dc-inactive-turn-ui');
+        this.$preturn.removeClass('dc-inactive-turn-ui');
 
         var turnsLeftMessage;
         var turnsLeft = game.numberOfTurnsLeft();
@@ -217,8 +217,8 @@
         break;
       case Game.State.MidTurn:
         this.midTurnController = new MidTurnController(this, currentPlayerId);
-        this.$preturn.hide();
-        this.$midturn.show();
+        this.$preturn.addClass('dc-inactive-turn-ui');
+        this.$midturn.removeClass('dc-inactive-turn-ui');
         break;
       }
     };
