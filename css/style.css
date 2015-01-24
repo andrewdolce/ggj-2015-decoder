@@ -1,9 +1,17 @@
-.dc-deck {
+.dc-deck-container {
     min-height: 180px;
 }
 
-.dc-deck > p {
+.dc-deck-container > p {
     font-size: 48px;
     font-variant: small-caps;
     text-transform: lowercase;
+}
+
+.dc-deck-container .dc-card {
+    margin-left: 4px;
+}
+
+.dc-deck-container .dc-card:nth-child(1) {
+    margin-left: 0px;
 }
