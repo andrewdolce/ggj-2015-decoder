@@ -13,11 +13,17 @@
   </head>
   <body>
     <div class="container" role="main">
-      <div id="board">
-        <ol class="jumbotron"></ol>
+      <div id="dc-preturn">
       </div>
-      <div id="hand">
-        <ol class="jumbotron"></ol>
+      <div id="dc-midturn">
+        <div id="board" class="dc-deck-container">
+          <ol class="jumbotron"></ol>
+        </div>
+        <div id="player-0" class="dc-deck-container">
+          <ol class="jumbotron"></ol>
+        </div>
+      </div>
+      <div id="dc-postturn">
       </div>
     </div>
 
@@ -40,8 +46,8 @@
 
     <!-- View -->
     <script src="src/card-view.js"></script>
+    <script src="src/ui.js"></script>
 
     <script src="src/main.js"></script>
-    <script src="src/ui.js"></script>
   </body>
 </html>

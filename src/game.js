@@ -61,7 +61,7 @@
       this.set({
         numberOfTurns: numberOfTurns,
         players: players,
-        scenario: game
+        scenario: scenario
       });
 
       // TODO: Set up the scenario and distribute cards to players
