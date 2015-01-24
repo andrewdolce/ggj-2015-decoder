@@ -1,6 +1,6 @@
 (function() {
-  var retargetRootElement = 'p';
-  var cardElement = 'span';
+  var retargetRootElement = 'ol';
+  var cardElement = 'li';
   var cardSelector = ['#hand', '#board'].map(function(idSelector) {
     return idSelector + ' ' + cardElement;
   }).join(', ');
@@ -29,19 +29,11 @@
     })
     .remove();
 
-  $('.dc-card').draggable({
-    revert: true,
-    revertDuration: 300
-  });
-
-  $('.dc-deck-container').droppable({
-    accept: '.dc-card',
-    drop: function(ev, ui) {
-      ui.draggable
-        .appendTo(this.$__retargetRoot)
-        // Reposition in "local space" to match previous "world space" offset
-        .offset(ui.offset);
-    }
-  });
+  $('.dc-deck-root').sortable({
+    connectWith: '.dc-deck-root',
+    scroll: false,
+    dropOnEmpty: true,
+    revert: 300
+  }).disableSelection();
 
 }());

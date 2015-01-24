@@ -1,15 +1,25 @@
-.dc-deck-container {
-    min-height: 180px;
-}
-
 .dc-deck-root {
     font-size: 48px;
     font-variant: small-caps;
     text-transform: lowercase;
+    min-height: 180px;
+}
+
+ol.dc-deck-root,
+ul.dc-deck-root {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    list-style-type: none;
 }
 
 .dc-deck-container .dc-card {
     margin-left: 4px;
+}
+
+.dc-deck-container li.dc-card {
+    display: inline-block;
+    /* HACK! Not sure why the top has an extra 8px. Using this to balance it out. */
+    padding-bottom: 8px;
 }
 
 .dc-deck-root .dc-card:nth-child(1) {
