@@ -35,6 +35,10 @@
     revert: 300
   }).disableSelection();
 
+  var stripPunctuation = function(string) {
+    return string.replace(/[,:;\-–.!]/g, '');
+  };
+
   (function() {
     var card = new Card({
       text: 'Athens'
@@ -42,6 +46,32 @@
     var cardView = new CardView({
       model: card
     });
-    cardView.render().appendToDeck('#hand');
+
+    var game = new Game();
+    var views = [];
+
+    var cardModels = stripPunctuation('This is Sparta, not Athens!')
+        .split(' ')
+        .map(function(word) {
+          var card = new Card({
+            text: word,
+            owner: 'board'
+          });
+          views.push(new CardView({
+            model: card
+          }));
+          return card;
+        });
+    game.set('cardsOnBoard', cardModels);
+
+    game.on('update_cards', function() {
+      views.forEach(function(cardView) {
+        cardView.render().appendToOwner();
+      });
+    });
+
+    game.trigger('update_cards');
+
+    window.game = game;
   }());
 }());

@@ -4,6 +4,7 @@
       "players": [],
       "currentTurn": 0,
       "scenario": undefined,
+      "cardsOnBoard": [],
       "numberOfTurns": 0
     }
   });

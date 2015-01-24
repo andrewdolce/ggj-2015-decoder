@@ -22,6 +22,12 @@
       if ($deck.length) {
         this.$el.appendTo($deck.get(0).$__retargetRoot);
       }
+    },
+
+    appendToOwner: function() {
+      var owner = this.model.get('owner');
+      var selector = '#' + owner;
+      return this.appendToDeck(selector);
     }
   });
 
