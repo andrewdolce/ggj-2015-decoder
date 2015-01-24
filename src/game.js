@@ -81,10 +81,6 @@
     },
 
     beginPreTurn: function() {
-      var currentPlayer = this.currentPlayer();
-      console.log( "*** Starting turn:", this.get( "currentTurn" ));
-      console.log( "Player", currentPlayer.get( "name" ), "take the screen! Everyone else look away!" );
-
       this.set( "state", Game.State.PreTurn );
     },
 
