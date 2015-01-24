@@ -32,7 +32,16 @@
   $('.dc-deck-root').sortable({
     connectWith: '.dc-deck-root',
     scroll: false,
-    dropOnEmpty: true,
     revert: 300
   }).disableSelection();
+
+  (function() {
+    var card = new Card({
+      text: 'Athens'
+    });
+    var cardView = new CardView({
+      model: card
+    });
+    cardView.render().appendToDeck('#hand');
+  }());
 }());
