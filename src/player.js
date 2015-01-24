@@ -1,5 +1,7 @@
 (function() {
   var Player = Backbone.Model.extend({
+    type: "Player",
+
     defaults: {
       "name": "Unnamed Player",
       "unsharedCards": [],
@@ -8,7 +10,7 @@
 
     shareCard: function( card ) {
       // TODO
-    }
+    },
   });
 
   window.Player = Player;

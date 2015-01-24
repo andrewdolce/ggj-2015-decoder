@@ -20,6 +20,8 @@
   }
 
   var Game = Backbone.Model.extend({
+    type: "Game",
+
     defaults: {
       "players": [],
       "numberOfTurns": 0,
