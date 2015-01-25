@@ -35,6 +35,7 @@
             order.push(el.__cardView.model);
           });
           game.finalizeTurn(card, order);
+          self.ui.$decks.find('.dc-card').removeClass('dc-active-card');
           $(this).off('click');
           self.ui.midTurnController = null;
         });
@@ -47,7 +48,7 @@
     }
   };
 
-  MidTurnController.prototype.returnCard = function($card) {
+  MidTurnController.prototype.returnCard = function($card, sender) {
     if ($card.hasClass('dc-active-card')) {
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.unlockFromProposal();
@@ -56,6 +57,8 @@
         .addClass('btn-danger')
         .removeClass('btn-success')
         .off('click');
+    } else {
+      $(sender).sortable('cancel');
     }
   };
 
@@ -117,7 +120,7 @@
         if ($(this).parent().attr('id') == 'board') {
           self.midTurnController.proposeCard(ui.item, ui.sender);
         } else {
-          self.midTurnController.returnCard(ui.item);
+          self.midTurnController.returnCard(ui.item, ui.sender);
         }
       }
     }).disableSelection();
