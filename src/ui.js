@@ -382,6 +382,13 @@
 
       case Game.State.PostTurn:
         this.showScreen(this.$postturn).then(function() {
+          if ('speechSynthesis' in window) {
+            var msg = new SpeechSynthesisUtterance(this.game.currentSentence());
+            msg.volume = 1;
+            msg.lang = 'en-US';
+            speechSynthesis.speak(msg);
+          }
+
           this.$postturn.html(postturnTemplate({
             prompt: game.get('scenario').get('prompt')
           }));
