@@ -144,6 +144,7 @@
     },
 
     beginMidTurn: function() {
+      this.midTurnTimeLimitMs = 15000;
       // Not sure that we need anything else here
       this.set('state', Game.State.MidTurn);
     },
