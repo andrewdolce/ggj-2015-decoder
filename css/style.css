@@ -55,3 +55,7 @@ ul.dc-deck-root {
     line-height: 1.3333333
     border-radius: 6px
 }
+
+#dc-results h1 {
+    font-variant: small-caps;
+}

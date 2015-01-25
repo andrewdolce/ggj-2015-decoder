@@ -76,14 +76,17 @@
     </script>
 
     <script id="game-results-template" type="text/x-handlebars-template">
-      {{#if success}}
-      <h1>AW YEAH</h1>
-      {{else}}
-      <h1>OH NOES</h1>
-      {{/if}}
-      <p>{{outcome}}</p>
-      <p>{{expected}}</p>
-      <p>{{actual}}</p>
+      <div class="jumbotron">
+        {{#if success}}
+        <h1>Aw yeah!</h1>
+        {{else}}
+        <h1>Oh noes!</h1>
+        {{/if}}
+        <p>{{expected}}</p>
+        <p>{{outcome}}</p>
+      </div>
+      <h2>You came up with:</h2>
+      <h2><span class="label label-default dc-hide-case">{{actual}}</span></h2>
     </script>
 
     <!-- Model -->
