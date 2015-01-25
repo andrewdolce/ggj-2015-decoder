@@ -29,3 +29,15 @@ ul.dc-deck-root {
 .dc-player-hand.dc-inactive-player {
     display: none;
 }
+
+.dc-inactive-turn-ui {
+    display: none;
+}
+
+.dc-btn-humongous {
+    padding: 20px 32px;
+    margin: 0px 32px;
+    font-size: 36px;
+    line-height: 1.3333333
+    border-radius: 6px
+}

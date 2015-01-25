@@ -87,7 +87,8 @@
       if ( turn < this.get( "numberOfTurns" )) {
         this.beginPreTurn();
       } else {
-        this.beginOpinionPhase();
+        // this.beginOpinionPhase();
+        this.beginFinalChoice();
       }
     },
 

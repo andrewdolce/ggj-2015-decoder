@@ -20,7 +20,6 @@
         game.beginVotingPhase();
       } else if (state == Game.State.FinalChoice) {
         game.beginFinalChoice();
-        game.lockInDecision( 0 );
       }
     }, 50);
   });
