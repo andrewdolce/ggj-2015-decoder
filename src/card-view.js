@@ -1,4 +1,7 @@
 (function() {
+  var normalLabelClass = 'label-default';
+  var disabledLabelClass = 'label-warning';
+
   var CardView = Backbone.View.extend({
     tagName: 'li',
     className: 'dc-card',
@@ -14,6 +17,7 @@
 
     render: function() {
       this.$el.html(this.template());
+      this.el.__cardView = this;
       return this;
     },
 
@@ -34,6 +38,22 @@
         selector = '#board';
       }
       return this.appendToDeck(selector);
+    },
+
+    lockFromProposal: function() {
+      this.$el
+        .removeClass('dc-active-card')
+        .find('> span')
+        .removeClass(normalLabelClass)
+        .addClass(disabledLabelClass);
+    },
+
+    unlockFromProposal: function() {
+      this.$el
+        .addClass('dc-active-card')
+        .find('> span')
+        .removeClass(disabledLabelClass)
+        .addClass(normalLabelClass);
     }
   });
 
