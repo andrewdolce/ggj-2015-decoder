@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Game!</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="container" role="main">
+      <div id="dc-preturn">
+      </div>
+      <div id="dc-midturn">
+        <div id="decks-root">
+           <div id="board" class="dc-deck-container">
+             <ol class="jumbotron"></ol>
+           </div>
+        </div>
+        <button id="midturn-button" class="btn btn-lg btn-danger">Confirm</button>
+      </div>
+      <div id="dc-finalchoice">
+      </div>
+      <div id="dc-results">
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="http://backbonejs.org/backbone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="src/jquery-ui.min.js"></script>
+
+    <script id="card-view-template" type="text/x-handlebars-template">
+      <span class="label label-default">{{text}}</span>
+    </script>
+
+    <script id="board-template" type="text/x-handlebars-template">
+      <div id="board" class="dc-deck-container">
+        <ol class="jumbotron"></ol>
+      </div>
+    </script>
+
+    <script id="player-hand-template" type="text/x-handlebars-template">
+      <div id="player-{{identifier}}" class="dc-deck-container dc-player-hand">
+        <ol class="jumbotron"></ol>
+      </div>
+    </script>
+
+    <script id="game-preturn-template" type="text/x-handlebars-template">
+      {{#if currentSentence}}
+      <div class="well">
+        <h1 class="dc-hide-case">{{currentSentence}}</h1>
+      </div>
+      {{/if}}
+      <h1><em>{{prompt}}</em></h1>
+      <h1>{{turnsLeftMessage}}</h1>
+      <h1>Player {{playerNumber}} is next! All other players look away now! No peeking!</h1>
+      <button id="preturn-button" class="btn btn-lg btn-default">Continue</button>
+    </script>
+
+    <script id="game-finalchoice-template" type="text/x-handlebars-template">
+      <h2>So what's the verdict?</h2>
+      <div>
+        <button id="button-choice-a" class="btn dc-btn-humongous btn-primary dc-btn-finalchoice">{{choiceA}}</button>
+        <button id="button-choice-b" class="btn dc-btn-humongous btn-success dc-btn-finalchoice">{{choiceB}}</button>
+      </div>
+    </script>
+
+    <script id="game-results-template" type="text/x-handlebars-template">
+      <div class="jumbotron">
+        {{#if success}}
+        <h1>Aw yeah!</h1>
+        {{else}}
+        <h1>Oh noes!</h1>
+        {{/if}}
+        <p>{{expected}}</p>
+        <p>{{outcome}}</p>
+      </div>
+      <h2>You came up with:</h2>
+      <h2><span class="label label-default dc-hide-case">{{actual}}</span></h2>
+    </script>
+
+    <!-- Model -->
+    <script src="src/card.js"></script>
+    <script src="src/scenario.js"></script>
+    <script src="src/player.js"></script>
+    <script src="src/game.js"></script>
+
+    <!-- View -->
+    <script src="src/card-view.js"></script>
+    <script src="src/ui.js"></script>
+
+    <script src="src/main.js"></script>
+  </body>
+</html>

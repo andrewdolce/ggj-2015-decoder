@@ -1,0 +1,177 @@
+[{
+  "rawSentence": "The dinosaur is vicious, hungry, and very fast, but it can only see things that are moving.",
+  "cards": [
+    "the dinosaur",
+    "is",
+    "vicious",
+    "hungry",
+    "and",
+    "very fast",
+    "but",
+    "it",
+    "can",
+    "only",
+    "see",
+    "things that",
+    "are",
+    "moving"
+  ],
+  "prompt": "Should we run?",
+  "choices": [
+    "Run!",
+    "Don't run!"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "You run. The dinosaur chases you down and eats you!",
+    "You do not run. The dinosaur doesn't see you, and wanders off."
+  ]
+}, {
+  "rawSentence": "Heads up, a falling helping of scalding baby back ribs is heading straight for your face!",
+  "cards": [
+    "heads",
+    "up",
+    "a falling",
+    "helping",
+    "of scalding",
+    "baby",
+    "back",
+    "ribs",
+    "is heading",
+    "straight",
+    "for your",
+    "face"
+  ],
+  "prompt": "Catch or dodge?",
+  "choices": [
+    "Catch!",
+    "Dodge!"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "You try to catch the falling ribs and get third degree burns!",
+    "You nimbly sidestep the rack of ribs. That was close!"
+  ]
+}, {
+  "rawSentence": "The berries are red juicy delicious completely safe and there is not any other source of food for miles.",
+  "cards": [
+    "the berries",
+    "are",
+    "red",
+    "juicy",
+    "delicious",
+    "completely",
+    "safe",
+    "and",
+    "there",
+    "is",
+    "not",
+    "any",
+    "other",
+    "source of",
+    "food",
+    "for miles"
+  ],
+  "prompt": "Should we eat this?",
+  "choices": [
+    "Eat!",
+    "Don't eat!"
+  ],
+  "correctChoice": 0,
+  "outcomes": [
+    "You scarf down the tasty berries and acquire nutrition! Hurray!",
+    "You turn your nose up at the berries. Later you are forced to eat your shoe to survive!"
+  ]
+}, {
+  "rawSentence": "The official bomb defusal manual says not to cut the blue wire under any circumstances.",
+  "cards": [
+    "The official",
+    "bomb",
+    "defusal",
+    "manual",
+    "says",
+    "not",
+    "to cut",
+    "the blue",
+    "wire",
+    "under",
+    "any",
+    "circumstances"
+  ],
+  "prompt": "Red or blue?",
+  "choices": [
+    "Red!",
+    "Blue!"
+  ],
+  "correctChoice": 0,
+  "outcomes": [
+    "You snip the red wire. Well that was easy! High fives all around.",
+    "Carefully you position the scissors and begin to cut the bl- BOOOOOOOOOOOOOOOOOOOOOOOOOOOM!"
+  ]
+}, {
+  "rawSentence": "There is red hot fire on the rooftop of the fancy hotel and the lobby is the only exit",
+  "cards": [
+    "There is",
+    "red",
+    "hot",
+    "fire on",
+    "the rooftop",
+    "of the",
+    "fancy",
+    "hotel",
+    "and",
+    "the lobby",
+    "is",
+    "the only",
+    "exit"
+  ],
+  "prompt": "Up or down?",
+  "choices": [
+    "Up!",
+    "Down!"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "You climb right into the flames! The heck is wrong with you?",
+    "You calmly exit the hotel."
+  ]
+}, {
+  "rawSentence": "The stick you found in the field turns out to be the bone of a large rare prehistoric dog",
+  "cards": [
+    "The stick",
+    "you",
+    "found",
+    "in the field",
+    "turns",
+    "out",
+    "to be the",
+    "bone",
+    "of a large",
+    "rare",
+    "prehistoric",
+    "dog"
+  ],
+  "prompt": "Keep or throw?",
+  "choices": [
+    "Keep!",
+    "Throw!"
+  ],
+  "correctChoice": 0,
+  "outcomes": [
+    "What a find! You make a million dollars selling it to Hollywood as a prop for that new dinosaur movie.",
+    "You hurl the priceless fossil awkwardly across the field. It bounces into a wood chipper and is destroyer forever."
+  ]
+}, {
+}, {
+  "rawSentence": "This is a test sentence.",
+  "prompt": "What do?",
+  "choices": [
+    "French fries",
+    "Pizza"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "You french-fried when you should have pizza'd.",
+    "You pizza your way down the hill."
+  ]
+}]

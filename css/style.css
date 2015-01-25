@@ -1,0 +1,61 @@
+.container {
+    padding-top: 64px;
+    text-align: center;
+}
+
+.dc-hide-case {
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
+
+.dc-deck-root {
+    font-size: 48px;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    min-height: 180px;
+}
+
+ol.dc-deck-root,
+ul.dc-deck-root {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    list-style-type: none;
+}
+
+.dc-deck-container .dc-card {
+    margin-left: 4px;
+}
+
+.dc-deck-container li.dc-card {
+    display: inline-block;
+    /* HACK! Not sure why the top has an extra 8px. Using this to balance it out. */
+    padding-bottom: 8px;
+}
+
+.dc-deck-root .dc-card:nth-child(1) {
+    margin-left: 0px;
+}
+
+.dc-card .label-warning {
+    opacity: 0.6;
+}
+
+.dc-player-hand.dc-inactive-player {
+    display: none;
+}
+
+.dc-inactive-screen {
+    display: none;
+}
+
+.dc-btn-humongous {
+    padding: 20px 32px;
+    margin: 0px 32px;
+    font-size: 36px;
+    line-height: 1.3333333
+    border-radius: 6px
+}
+
+#dc-results h1 {
+    font-variant: small-caps;
+}
