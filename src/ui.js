@@ -4,27 +4,97 @@
     this.$midturn = this.ui.$midturn;
     this.$playerDeck = $('#player-' + playerId);
     this.$continueButton = $('#midturn-button');
+    this.$timer = $('#dc-midturn-timer')
+      .show();
 
     this.$playerDeck
       .removeClass('dc-inactive-player')
       .find('.dc-card')
       .addClass('dc-active-card');
 
-    this.$disableButton();
+    this.disableButton();
 
     $('#decks-root').prepend($('#board'));
+
+    this.durationMs = this.ui.game.midTurnTimeLimitMs;
+    this.interval = 0;
   };
 
-  MidTurnController.prototype.$enableButton = function() {
-    return this.$continueButton
+  MidTurnController.prototype.startTimer = function() {
+    this.startTimeMs = Date.now();
+    this.interval = setInterval(function() {
+      var timeRemaining = this.timeRemaining();
+
+      var choosingDone = new $.Deferred();
+      var shuffleDone = new $.Deferred();
+
+      if (!timeRemaining) {
+        var shuffleBoard = false;
+        if (this.$continueButton.attr('disabled')) {
+          shuffleBoard = true;
+          var $cards = this.$playerDeck.find('.dc-card');
+          var $randomCard = $($cards.get((Math.random() * $cards.length) | 0));
+          var offset = $randomCard.offset();
+          $('#board').get(0).$__retargetRoot.append($randomCard);
+          $randomCard
+            .offset(offset)
+            .animate({
+              top: 0,
+              left: 0,
+            }, 300, 'linear', function() {
+              setTimeout(function() {
+                choosingDone.resolve();
+              }, 500);
+            });
+          this.proposeCard($randomCard, this.$playerDeck.get(0));
+          this.$continueButton.attr('disabled', true);
+        } else {
+          choosingDone.resolve();
+        }
+
+        choosingDone.then(function() {
+          if (shuffleBoard) {
+            console.warn('TODO: Maybe shuffle board?');
+            shuffleDone.resolve();
+          } else {
+            shuffleDone.resolve();
+          }
+        }.bind(this));
+
+        shuffleDone.then(function() {
+          this._confirmCard(this.$continueButton.__card);
+        }.bind(this));
+
+        clearInterval(this.interval);
+      }
+
+      var minutes = '' + ((timeRemaining / 1000 / 60) | 0);
+      var seconds = '' + (((timeRemaining - minutes * 60) / 1000) | 0);
+      while (minutes.length < 2)
+        minutes = '0' + minutes;
+      while (seconds.length < 2)
+        seconds = '0' + seconds;
+      this.$timer.text(minutes + ':' + seconds);
+    }.bind(this), 10);
+  };
+
+  MidTurnController.prototype.timeRemaining = function() {
+    return Math.max((this.startTimeMs + this.durationMs) - Date.now(), 0);
+  };
+
+  MidTurnController.prototype.enableButton = function(card) {
+    this.$continueButton
       .attr('disabled', false)
-      .text('Confirm');
+      .text('Confirm')
+      .on('click', this._confirmCard.bind(this, card));
+    this.$continueButton.__card = card;
   };
 
-  MidTurnController.prototype.$disableButton = function() {
+  MidTurnController.prototype.disableButton = function() {
     return this.$continueButton
       .attr('disabled', true)
-      .text('Drag a fragment up');
+      .text('Drag a fragment up')
+      .off('click');
   };
 
   // Put a card from hand into board. Has not confirmed yet.
@@ -38,9 +108,7 @@
         el.__cardView.lockFromProposal();
       });
 
-      var self = this;
-      this.$enableButton()
-        .on('click', this._confirmCard.bind(this, card));
+      this.enableButton(card);
     }
 
     // Reject card if not an active card. That means we already
@@ -51,8 +119,11 @@
   };
 
   MidTurnController.prototype._confirmCard = function(card) {
-    var game = this.ui.game;
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
 
+    var game = this.ui.game;
     var order = [];
     $('#board .dc-card').each(function(index, el) {
       order.push(el.__cardView.model);
@@ -60,6 +131,7 @@
     game.finalizeTurn(card, order);
     this.ui.$decks.find('.dc-card').removeClass('dc-active-card');
     this.$continueButton.off('click');
+    this.$timer.fadeOut(300);
     this.ui.midTurnController = null;
   },
 
@@ -69,7 +141,7 @@
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.unlockFromProposal();
       });
-      this.$disableButton().off('click');
+      this.disableButton();
     } else {
       $(sender).sortable('cancel');
     }
@@ -209,10 +281,15 @@
 
   UI.prototype.showScreen = function(screen) {
     var deferred = new $.Deferred();
+    deferred.thenScreenEntered = new $.Deferred();
     var fadeInScreen = function() {
       deferred.resolve();
-      this.syncCards();
-      this.$currentScreen = $(screen).fadeIn(300);
+      if (this.game.get('state') !== Game.State.PostTurn) {
+        this.syncCards();
+      }
+      this.$currentScreen = $(screen).fadeIn(300, function() {
+        deferred.thenScreenEntered.resolve();
+      });
     }.bind(this);
 
     if (this.$currentScreen) {
@@ -283,7 +360,10 @@
 
       case Game.State.MidTurn:
         this.midTurnController = new MidTurnController(this, currentPlayerId);
-        this.showScreen(this.$midturn);
+        var screenExited = this.showScreen(this.$midturn);
+        screenExited.thenScreenEntered.then(function() {
+          this.midTurnController.startTimer();
+        }.bind(this));
         break;
 
       case Game.State.PostTurn:

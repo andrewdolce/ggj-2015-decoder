@@ -8,9 +8,11 @@
 
   var scenarioId = getParameterByName('id');
   var shouldShowPostTurn = !getParameterByName('postturn_disabled');
+  var boardPercentage = getParameterByName('p') || undefined;
   var game = new Game({
     scenarioId: scenarioId ? scenarioId : -1,
-    shouldShowPostTurn: shouldShowPostTurn
+    shouldShowPostTurn: shouldShowPostTurn,
+    boardPercentage: boardPercentage
   });
   var ui = new UI(game);
 
