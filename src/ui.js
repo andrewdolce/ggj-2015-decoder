@@ -145,8 +145,24 @@
   };
 
   UI.prototype.syncCards = function() {
+    var board = [];
     this.cardViews.forEach(function forEachCardView(cardView) {
-      cardView.render().appendToOwner();
+      if (cardView.model.isInHand()) {
+        cardView.render().appendToOwner();
+      } else {
+        board.push(cardView);
+      }
+    });
+
+    var boardCards = this.game.get('cardsOnBoard');
+    boardCards.forEach(function(card) {
+      var cardView = board.filter(function(view) {
+        return view.model === card;
+      })[0];
+
+      if (cardView) {
+        cardView.render().appendToOwner();
+      }
     });
   };
 
