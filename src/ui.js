@@ -274,8 +274,10 @@
 
       case Game.State.PostTurn:
         this.showScreen(this.$postturn).then(function() {
-          this.$postturn.html(postturnTemplate());
-          this.$postturn.prepend($('#board'));
+          this.$postturn.html(postturnTemplate({
+            prompt: game.get('scenario').get('prompt')
+          }));
+          this.$postturn.find('#post-turn-board-root').prepend($('#board'));
           this.$deckRoots.sortable('disable');
           $('#postturn-button').on('click', function() {
             this.$deckRoots.sortable('enable');
