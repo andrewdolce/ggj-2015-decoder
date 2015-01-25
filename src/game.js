@@ -68,14 +68,15 @@
     },
 
     finishPlayerSetup: function(numberOfPlayers) {
-      var numberOfTurns = numberOfPlayers * 3; // Decide how we determine this
-
       var scenarioId = this.get('scenarioId');
       if (scenarioId === -1) {
         scenarioId = (Math.random() * this.scenarioDB.length) | 0;
       }
 
       var scenario = new Scenario(this.scenarioDB[scenarioId]);
+      var numCards = scenario.get('cards').length;
+      var numberOfRounds = Math.max((numCards / numberOfPlayers * 0.75) | 0, 1);
+      var numberOfTurns = numberOfRounds * numberOfPlayers;
       var cardGroups = scenario.generateCardGroups(numberOfPlayers);
 
       var players = [];

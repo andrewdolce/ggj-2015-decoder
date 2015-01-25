@@ -5,34 +5,47 @@
 
   var Scenario = Backbone.Model.extend({
     defaults: {
-      "rawSentence": 'The dinosaur is vicious, hungry, and very fast, but it can only see things that are moving.',
-      "cards": [],
-      "prompt": "Should we run?",
-      "choices": [ "Run!", "Don't run!" ],
-      "correctChoice": 1,
-      "outcomes": [ "You run. The dinosaur chases you down and eats you!",
-                    "You do not run. The dinosaur doesn't see you, and wanders off."
-                  ]
+      rawSentence: '',
+      cards: [],
+      prompt: '',
+      choices: [],
+      correctChoice: -1,
+      outcomes: []
+    },
+
+    constructor: function() {
+      Backbone.Model.apply(this, arguments);
+
+      var rawSentence = this.get('rawSentence');
+      var cards = this.get('cards');
+
+      var cardModels;
+      if (cards.length) {
+        cardModels = cards.map(function(phrase) {
+          return new Card({ text: stripPunctuation(phrase) });
+        });
+      } else {
+        cardModels = stripPunctuation(rawSentence)
+          .split(' ')
+          .map(function(word) {
+            return new Card({
+              text: word
+            });
+          });
+      }
+
+      this.set('cards', cardModels);
     },
 
     generateCardGroups: function(numberOfGroups) {
       var rawSentence = this.get('rawSentence');
-      var cardModels = stripPunctuation(rawSentence)
-        .split(' ')
-        .map(function(word) {
-          var card = new Card({
-            text: word
-          });
-          return card;
-        });
-      this.set('cards', cardModels);
 
       var groups = [];
       for (var i = 0; i < numberOfGroups; i++) {
         groups.push([]);
       }
 
-      var shuffledCards = _.shuffle(cardModels);
+      var shuffledCards = _.shuffle(this.get('cards'));
       for (var i = 0; i < shuffledCards.length; i++) {
         var groupIndex = i % numberOfGroups;
         var group = groups[groupIndex];
