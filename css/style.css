@@ -1,3 +1,13 @@
+.container {
+    padding-top: 64px;
+    text-align: center;
+}
+
+.dc-hide-case {
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
+
 .dc-deck-root {
     font-size: 48px;
     font-variant: small-caps;

@@ -53,7 +53,11 @@
     </script>
 
     <script id="game-preturn-template" type="text/x-handlebars-template">
-      <h1>"{{currentSentence}}"</h1>
+      {{#if currentSentence}}
+      <div class="well">
+        <h1 class="dc-hide-case">{{currentSentence}}</h1>
+      </div>
+      {{/if}}
       <h1><em>{{prompt}}</em></h1>
       <h1>{{turnsLeftMessage}}</h1>
       <h1>Player {{playerNumber}} is next! All other players look away now! No peeking!</h1>
