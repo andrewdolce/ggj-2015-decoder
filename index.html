@@ -65,7 +65,10 @@
     </script>
 
     <script id="game-finalchoice-template" type="text/x-handlebars-template">
-      <h1>So what's the verdict?</h1>
+      <div class="well">
+        <h1 class="dc-hide-case">{{currentSentence}}</h1>
+      </div>
+      <h2>So what's the verdict?</h2>
       <div>
         <button id="button-choice-a" class="btn dc-btn-humongous btn-primary dc-btn-finalchoice">{{choiceA}}</button>
         <button id="button-choice-b" class="btn dc-btn-humongous btn-success dc-btn-finalchoice">{{choiceB}}</button>

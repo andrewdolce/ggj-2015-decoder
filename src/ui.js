@@ -239,6 +239,7 @@
       case Game.State.FinalChoice:
         var choices = game.get('scenario').get('choices');
         this.$finalchoice.html(finalchoiceTemplate({
+          currentSentence: game.currentSentence(),
           choiceA: choices[0],
           choiceB: choices[1]
         }));
