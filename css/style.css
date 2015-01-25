@@ -36,6 +36,10 @@ ul.dc-deck-root {
     margin-left: 0px;
 }
 
+.dc-card .label-warning {
+    opacity: 0.6;
+}
+
 .dc-player-hand.dc-inactive-player {
     display: none;
 }

@@ -18,7 +18,10 @@
   // Put a card from hand into board. Has not confirmed yet.
   MidTurnController.prototype.proposeCard = function($card, sender) {
     if ($card.hasClass('dc-active-card')) {
-      var card = $card.get(0).__cardView.model;
+      var cardView = $card.get(0).__cardView;
+      cardView.propose();
+
+      var card = cardView.model;
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.lockFromProposal();
       });
@@ -50,6 +53,7 @@
 
   MidTurnController.prototype.returnCard = function($card, sender) {
     if ($card.hasClass('dc-active-card')) {
+      $card.get(0).__cardView.returnToHand();
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.unlockFromProposal();
       });
