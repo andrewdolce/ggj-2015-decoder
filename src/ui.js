@@ -1,6 +1,55 @@
 (function() {
+  var MidTurnController = function(ui, playerId) {
+    this.ui = ui;
+    this.$midturn = this.ui.$midturn;
+    this.$playerDeck = $('#player-' + playerId);
+    this.$continueButton = $('#midturn-button');
+
+    this.$playerDeck
+      .removeClass('dc-inactive-player')
+      .find('.dc-card')
+      .addClass('dc-active-card');
+  };
+
+  // Put a card from hand into board. Has not confirmed yet.
+  MidTurnController.prototype.proposeCard = function($card, sender) {
+    if ($card.hasClass('dc-active-card')) {
+      var card = $card.get(0).__cardView.model;
+      this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
+        el.__cardView.lockFromProposal();
+      });
+
+      var self = this;
+      this.$continueButton.on('click', function() {
+        var game = self.ui.game;
+
+        var order = game.get('cardsOnBoard').splice();
+        order.push(card);
+        game.finalizeTurn(card, order);
+        $(this).off('click');
+        self.ui.midTurnController = null;
+      });
+    }
+
+    // Reject card if not an active card. That means we already
+    // proposed a card in the board, and have not taken it back yet.
+    else {
+      $(sender).sortable('cancel');
+    }
+  };
+
+  MidTurnController.prototype.returnCard = function($card) {
+    if ($card.hasClass('dc-active-card')) {
+      this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
+        el.__cardView.unlockFromProposal();
+      });
+      this.$continueButton.off('click');
+    }
+  };
+
   var UI = function(game) {
     this.game = game;
+    this.midTurnController = null;
     this.$decks = null;
     this.$deckRoots = null;
     this.$preturn  = $('#dc-preturn');
@@ -54,23 +103,9 @@
         var disabledLabelClass = 'label-warning';
 
         if ($(this).parent().attr('id') == 'board') {
-          if (ui.item.hasClass('dc-active-card')) {
-            self.$playerDecks.find('.dc-card')
-              .removeClass('dc-active-card')
-              .find('> span')
-              .removeClass(normalLabelClass)
-              .addClass(disabledLabelClass);
-          } else {
-            $(ui.sender).sortable('cancel');
-          }
+          self.midTurnController.proposeCard(ui.item, ui.sender);
         } else {
-          if (ui.item.hasClass('dc-active-card')) {
-            self.$playerDecks.find('.dc-card')
-              .addClass('dc-active-card')
-              .find('> span')
-              .removeClass(disabledLabelClass)
-              .addClass(normalLabelClass);
-          }
+          self.midTurnController.returnCard(ui.item);
         }
       }
     }).disableSelection();
@@ -94,7 +129,7 @@
     return function() {
       this.$playerDecks.remove();
       this.game.get('players').forEach(function(player) {
-        $(template(player.attributes)).appendTo(this.$midturn);
+        $(template(player.attributes)).appendTo($('#decks-root'));
       }, this);
       this._initDecks();
     };
@@ -153,10 +188,7 @@
         this.$playerDecks.addClass('dc-inactive-player');
         break;
       case Game.State.MidTurn:
-        $('#player-' + currentPlayerId)
-          .removeClass('dc-inactive-player')
-          .find('.dc-card')
-          .addClass('dc-active-card');
+        this.midTurnController = new MidTurnController(this, currentPlayerId);
         this.$preturn.hide();
         this.$midturn.show();
         break;

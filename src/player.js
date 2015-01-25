@@ -8,8 +8,14 @@
       "cardsInHand": []
     },
 
-    playCardFromHand: function( card ) {
-      // TODO
+    playCardFromHand: function( card, game ) {
+      card.set('owner', game);
+      var cardsInHand = _.clone(this.get('cardsInHand'));
+      var index = cardsInHand.indexOf(card);
+      if (index != -1) {
+        cardsInHand.splice(index, 1);
+      }
+      this.set('cardsInHand', cardsInHand);
     },
 
     addCardsToHand: function(cards) {

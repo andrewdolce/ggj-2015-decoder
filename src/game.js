@@ -104,7 +104,7 @@
       var player = this.currentPlayer();
       player.playCardFromHand( sharedCard );
       this.set( "cardsOnBoard", cardsOnBoard );
-      self.beginNextTurn();
+      this.beginNextTurn();
     },
 
     beginOpinionPhase: function() {
