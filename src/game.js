@@ -68,6 +68,22 @@
       return this.get('numberOfTurns') - this.get('currentTurn');
     },
 
+    numberOfRounds: function() {
+      var numberOfPlayers = this.get('players').length;
+      if (numberOfPlayers > 0) {
+        return this.get('numberOfTurns') / numberOfPlayers;
+      }
+      return 0;
+    },
+
+    currentRound: function() {
+      var numberOfPlayers = this.get('players').length;
+      if (numberOfPlayers > 0) {
+        return ((this.get('currentTurn') / numberOfPlayers) | 0) + 1;
+      }
+      return 0;
+    },
+
     // State changes
     beginPlayerSetup: function() {
       this.set('state', Game.State.PlayerSetup);
