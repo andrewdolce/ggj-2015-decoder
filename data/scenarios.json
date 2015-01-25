@@ -1,24 +1,5 @@
 [{
   "rawSentence": "The dinosaur is vicious, hungry, and very fast, but it can only see things that are moving.",
-  "cards": [
-    "The",
-    "dinosaur",
-    "is",
-    "vicious",
-    "hungry",
-    "and",
-    "very",
-    "fast",
-    "but",
-    "it",
-    "can",
-    "only",
-    "see",
-    "things",
-    "that",
-    "are",
-    "moving"
-  ],
   "prompt": "Should we run?",
   "choices": [
     "Run!",
@@ -31,13 +12,6 @@
   ]
 }, {
   "rawSentence": "This is a test sentence.",
-  "cards": [
-    "This",
-    "is",
-    "a",
-    "test",
-    "sentence"
-  ],
   "prompt": "What do?",
   "choices": [
     "French fries",
