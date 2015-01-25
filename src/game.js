@@ -32,6 +32,7 @@
       cardsOnBoard: [],
       state: State.Uninitialized,
       shouldShowPostTurn: true,
+      boardPercentage: 0.65,
       finalChoice: 0
     },
 
@@ -95,9 +96,10 @@
         scenarioId = (Math.random() * this.scenarioDB.length) | 0;
       }
 
+      var p = this.get('boardPercentage');
       var scenario = new Scenario(this.scenarioDB[scenarioId]);
       var numCards = scenario.get('cards').length;
-      var numberOfRounds = Math.max((numCards / numberOfPlayers * 0.65) | 0, 1);
+      var numberOfRounds = Math.max((numCards / numberOfPlayers * p) | 0, 1);
       var numberOfTurns = numberOfRounds * numberOfPlayers;
       var cardGroups = scenario.generateCardGroups(numberOfPlayers);
 
