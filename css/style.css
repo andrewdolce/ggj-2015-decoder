@@ -9,10 +9,10 @@
 }
 
 .dc-deck-root {
-    font-size: 48px;
+    font-size: 36px;
     font-variant: small-caps;
     text-transform: lowercase;
-    min-height: 180px;
+    min-height: 3.70em;
 }
 
 ol.dc-deck-root,
