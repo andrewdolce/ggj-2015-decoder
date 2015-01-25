@@ -10,11 +10,21 @@
       .find('.dc-card')
       .addClass('dc-active-card');
 
-    this.$continueButton
-      .addClass('btn-danger')
-      .removeClass('btn-success');
+    this.$disableButton();
 
     $('#decks-root').prepend($('#board'));
+  };
+
+  MidTurnController.prototype.$enableButton = function() {
+    return this.$continueButton
+      .attr('disabled', false)
+      .text('Confirm');
+  };
+
+  MidTurnController.prototype.$disableButton = function() {
+    return this.$continueButton
+      .attr('disabled', true)
+      .text('Drag a fragment up');
   };
 
   // Put a card from hand into board. Has not confirmed yet.
@@ -29,9 +39,7 @@
       });
 
       var self = this;
-      this.$continueButton
-        .removeClass('btn-danger')
-        .addClass('btn-success')
+      this.$enableButton()
         .on('click', this._confirmCard.bind(this, card));
     }
 
@@ -61,10 +69,7 @@
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.unlockFromProposal();
       });
-      this.$continueButton
-        .addClass('btn-danger')
-        .removeClass('btn-success')
-        .off('click');
+      this.$disableButton().off('click');
     } else {
       $(sender).sortable('cancel');
     }
