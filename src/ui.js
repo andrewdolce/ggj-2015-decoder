@@ -93,8 +93,7 @@
     this._initDecks();
     this._init();
 
-    this.$screens.hide();
-    this.$currentScreen = null;
+    this.$currentScreen = this.$preturn;
   };
 
   UI.RETARGET_ROOT_ELEMENT = UI.prototype.RETARGET_ROOT_ELEMENT = 'ol';
@@ -243,23 +242,23 @@
       case Game.State.PreTurn:
         this.showScreen(this.$preturn).then(function() {
           this.$playerDecks.addClass('dc-inactive-player');
+
+          var turnsLeftMessage;
+          var turnsLeft = game.numberOfTurnsLeft();
+          if (turnsLeft > 1) {
+            turnsLeftMessage = 'You have ' + turnsLeft + ' turns left to decide.';
+          } else {
+            turnsLeftMessage = 'Last turn!';
+          }
+
+          this.$preturn.html(preturnTemplate({
+            turnsLeftMessage: turnsLeftMessage,
+            currentSentence: game.currentSentence(),
+            prompt: game.get('scenario').get('prompt'),
+            playerNumber: currentPlayerId + 1
+          }));
+          $('#preturn-button').on('click', game.beginMidTurn.bind(game));
         }.bind(this));
-
-        var turnsLeftMessage;
-        var turnsLeft = game.numberOfTurnsLeft();
-        if (turnsLeft > 1) {
-          turnsLeftMessage = 'You have ' + turnsLeft + ' turns left to decide.';
-        } else {
-          turnsLeftMessage = 'Last turn!';
-        }
-
-        this.$preturn.html(preturnTemplate({
-          turnsLeftMessage: turnsLeftMessage,
-          currentSentence: game.currentSentence(),
-          prompt: game.get('scenario').get('prompt'),
-          playerNumber: currentPlayerId + 1
-        }));
-        $('#preturn-button').on('click', game.beginMidTurn.bind(game));
         break;
 
       case Game.State.MidTurn:
