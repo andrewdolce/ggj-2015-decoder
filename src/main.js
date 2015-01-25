@@ -7,8 +7,10 @@
   };
 
   var scenarioId = getParameterByName('id');
+  var shouldShowPostTurn = !getParameterByName('postturn_disabled');
   var game = new Game({
-    scenarioId: scenarioId ? scenarioId : -1
+    scenarioId: scenarioId ? scenarioId : -1,
+    shouldShowPostTurn: shouldShowPostTurn
   });
   var ui = new UI(game);
 

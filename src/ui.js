@@ -82,10 +82,12 @@
     this.$deckRoots = null;
     this.$preturn  = $('#dc-preturn');
     this.$midturn  = $('#dc-midturn');
+    this.$postturn = $('#dc-postturn');
     this.$finalchoice = $('#dc-finalchoice');
     this.$results = $('#dc-results');
     this.$screens = this.$preturn
       .add(this.$midturn)
+      .add(this.$postturn)
       .add(this.$finalchoice)
       .add(this.$results);
     this.cardViews = [];
@@ -225,6 +227,9 @@
     var preturnSource = $('#game-preturn-template').html();
     var preturnTemplate = Handlebars.compile(preturnSource);
 
+    var postturnSource = $('#game-postturn-template').html();
+    var postturnTemplate = Handlebars.compile(postturnSource);
+
     var finalchoiceSource = $('#game-finalchoice-template').html();
     var finalchoiceTemplate = Handlebars.compile(finalchoiceSource);
 
@@ -264,6 +269,18 @@
       case Game.State.MidTurn:
         this.midTurnController = new MidTurnController(this, currentPlayerId);
         this.showScreen(this.$midturn);
+        break;
+
+      case Game.State.PostTurn:
+        this.showScreen(this.$postturn).then(function() {
+          this.$postturn.html(postturnTemplate());
+          this.$postturn.prepend($('#board'));
+          this.$deckRoots.sortable('disable');
+          $('#postturn-button').on('click', function() {
+            this.$deckRoots.sortable('enable');
+            game.beginPreTurn();
+          }.bind(this));
+        }.bind(this));
         break;
 
       case Game.State.FinalChoice:

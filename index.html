@@ -24,6 +24,8 @@
         </div>
         <button id="midturn-button" class="btn btn-lg btn-success">Confirm</button>
       </div>
+      <div id="dc-postturn" style="display: none">
+      </div>
       <div id="dc-finalchoice" style="display: none">
       </div>
       <div id="dc-results" style="display: none">
@@ -64,6 +66,11 @@
       <h1>{{turnsLeftMessage}}</h1>
       <h1>Player {{playerNumber}} is next! All other players look away now! No peeking!</h1>
       <button id="preturn-button" class="btn btn-lg btn-default">Continue</button>
+    </script>
+
+    <script id="game-postturn-template" type="text/x-handlebars-template">
+      <p>Show everybody the sentence!</p>
+      <button id="postturn-button" class="btn btn-lg btn-default">Continue</button>
     </script>
 
     <script id="game-finalchoice-template" type="text/x-handlebars-template">

@@ -7,6 +7,7 @@
     'ShowScenarioChoices',
     'PreTurn',
     'MidTurn',
+    'PostTurn',
     'OpinionPhase',
     'VotingPhase',
     'FinalChoice',
@@ -30,6 +31,7 @@
       scenario: undefined,
       cardsOnBoard: [],
       state: State.Uninitialized,
+      shouldShowPostTurn: true,
       finalChoice: 0
     },
 
@@ -105,8 +107,14 @@
       var turn = this.get('currentTurn') + 1;
       this.set('currentTurn', turn);
 
-      if (turn < this.get('numberOfTurns')) {
+      if (!turn) {
         this.beginPreTurn();
+      } else if (turn < this.get('numberOfTurns')) {
+        if (this.get('shouldShowPostTurn')) {
+          this.beginPostTurn();
+        } else {
+          this.beginPreTurn();
+        }
       } else {
         // this.beginOpinionPhase();
         this.beginFinalChoice();
@@ -120,6 +128,10 @@
     beginMidTurn: function() {
       // Not sure that we need anything else here
       this.set('state', Game.State.MidTurn);
+    },
+
+    beginPostTurn: function() {
+      this.set('state', Game.State.PostTurn);
     },
 
     finalizeTurn: function(sharedCard, cardsOnBoard) {
