@@ -144,7 +144,8 @@
     },
 
     beginMidTurn: function() {
-      this.midTurnTimeLimitMs = 15000;
+      var numberOfCards = this.get('cardsOnBoard').length;
+      this.midTurnTimeLimitMs = 10000 + 1000 * numberOfCards;
       // Not sure that we need anything else here
       this.set('state', Game.State.MidTurn);
     },
