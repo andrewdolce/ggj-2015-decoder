@@ -23,8 +23,10 @@
       this.$continueButton.on('click', function() {
         var game = self.ui.game;
 
-        var order = game.get('cardsOnBoard').splice();
-        order.push(card);
+        var order = [];
+        $('#board .dc-card').each(function(index, el) {
+          order.push(el.__cardView.model);
+        });
         game.finalizeTurn(card, order);
         $(this).off('click');
         self.ui.midTurnController = null;
