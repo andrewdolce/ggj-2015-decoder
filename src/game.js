@@ -34,11 +34,15 @@
     },
 
     constructor: function() {
+      Backbone.Model.apply(this, arguments);
+
+      this.loaded = new $.Deferred();
+
       var self = this;
       $.getJSON('data/scenarios.json', function(data) {
         self.scenarioDB = data;
+        self.loaded.resolve(self);
       });
-      Backbone.Model.apply(this, arguments);
     },
 
     // Accessors
