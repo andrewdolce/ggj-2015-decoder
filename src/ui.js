@@ -23,8 +23,10 @@
       this.$continueButton.on('click', function() {
         var game = self.ui.game;
 
-        var order = game.get('cardsOnBoard').splice();
-        order.push(card);
+        var order = [];
+        $('#board .dc-card').each(function(index, el) {
+          order.push(el.__cardView.model);
+        });
         game.finalizeTurn(card, order);
         $(this).off('click');
         self.ui.midTurnController = null;
@@ -143,8 +145,24 @@
   };
 
   UI.prototype.syncCards = function() {
+    var board = [];
     this.cardViews.forEach(function forEachCardView(cardView) {
-      cardView.render().appendToOwner();
+      if (cardView.model.isInHand()) {
+        cardView.render().appendToOwner();
+      } else {
+        board.push(cardView);
+      }
+    });
+
+    var boardCards = this.game.get('cardsOnBoard');
+    boardCards.forEach(function(card) {
+      var cardView = board.filter(function(view) {
+        return view.model === card;
+      })[0];
+
+      if (cardView) {
+        cardView.render().appendToOwner();
+      }
     });
   };
 
