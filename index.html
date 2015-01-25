@@ -23,6 +23,8 @@
         </div>
         <button id="midturn-button" class="btn btn-lg btn-danger">Confirm</button>
       </div>
+      <div id="dc-finalchoice">
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.js"></script>
@@ -54,6 +56,14 @@
       <h1>{{turnsLeftMessage}}</h1>
       <h1>Player {{playerNumber}} is next! All other players look away now! No peeking!</h1>
       <button id="preturn-button" class="btn btn-lg btn-default">Continue</button>
+    </script>
+
+    <script id="game-finalchoice-template" type="text/x-handlebars-template">
+      <h1>So what's the verdict?</h1>
+      <div>
+        <button id="button-choice-a" class="btn dc-btn-humongous btn-primary dc-btn-finalchoice">{{choiceA}}</button>
+        <button id="button-choice-b" class="btn dc-btn-humongous btn-success dc-btn-finalchoice">{{choiceB}}</button>
+      </div>
     </script>
 
     <!-- Model -->

@@ -66,7 +66,7 @@
     this.$deckRoots = null;
     this.$preturn  = $('#dc-preturn');
     this.$midturn  = $('#dc-midturn');
-    this.$postturn = $('#dc-postturn');
+    this.$finalchoice = $('#dc-finalchoice');
     this.cardViews = [];
 
     this._initDecks();
@@ -186,6 +186,9 @@
     var preturnSource = $('#game-preturn-template').html();
     var preturnTemplate = Handlebars.compile(preturnSource);
 
+    var finalchoiceSource = $('#game-finalchoice-template').html();
+    var finalchoiceTemplate = Handlebars.compile(finalchoiceSource);
+
     return function(game, state) {
       var currentPlayer = game.currentPlayer();
       var currentPlayerId = -1;
@@ -219,6 +222,17 @@
         this.midTurnController = new MidTurnController(this, currentPlayerId);
         this.$preturn.addClass('dc-inactive-turn-ui');
         this.$midturn.removeClass('dc-inactive-turn-ui');
+        break;
+      case Game.State.FinalChoice:
+        var choices = game.get('scenario').get('choices');
+        this.$finalchoice.html(finalchoiceTemplate({
+          choiceA: choices[0],
+          choiceB: choices[1]
+        }));
+        $('#button-choice-a').on( 'click', game.lockInDecision.bind(game, 0));
+        $('#button-choice-b').on( 'click', game.lockInDecision.bind(game, 1));
+        this.$midturn.addClass('dc-inactive-turn-ui');
+        this.$finalchoice.removeClass('dc-inactive-turn-ui');
         break;
       }
     };
