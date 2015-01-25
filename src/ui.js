@@ -126,7 +126,9 @@
     var game = this.ui.game;
     var order = [];
     $('#board .dc-card').each(function(index, el) {
-      order.push(el.__cardView.model);
+      if (!$(el).hasClass('ui-sortable-placeholder')) {
+        order.push(el.__cardView.model);
+      }
     });
     game.finalizeTurn(card, order);
     this.ui.$decks.find('.dc-card').removeClass('dc-active-card');
@@ -213,9 +215,21 @@
         var disabledLabelClass = 'label-warning';
 
         if ($(this).parent().attr('id') == 'board') {
-          self.midTurnController.proposeCard(ui.item, ui.sender);
+          if (self.midTurnController) {
+            self.midTurnController.proposeCard(ui.item, ui.sender);
+          } else {
+            $(ui.sender).sortable('cancel');
+          }
         } else {
           self.midTurnController.returnCard(ui.item, ui.sender);
+        }
+      },
+
+      sort: function(event, ui) {
+        if (self.midTurnController) {
+          if (!self.midTurnController.timeRemaining()) {
+            $(ui.sender).sortable('cancel');
+          }
         }
       }
     }).disableSelection();

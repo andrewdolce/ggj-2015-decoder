@@ -109,6 +109,58 @@
     "Carefully you position the scissors and begin to cut the bl- BOOOOOOOOOOOOOOOOOOOOOOOOOOOM!"
   ]
 }, {
+  "rawSentence": "The official bomb defusal manual says not to cut the red wire under any circumstances.",
+  "cards": [
+    "The official",
+    "bomb",
+    "defusal",
+    "manual",
+    "says",
+    "not",
+    "to cut",
+    "the red",
+    "wire",
+    "under",
+    "any",
+    "circumstances"
+  ],
+  "prompt": "Red or blue?",
+  "choices": [
+    "Red!",
+    "Blue!"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "Carefully you position the scissors and begin to cut the re- BOOOOOOOOOOOOOOOOOOOOOOOOOOOM!",
+    "You snip the blue wire. Well that was easy! High fives all around."
+  ]
+}, {
+  "rawSentence": "The helicopter over the rooftop is evacuating POTUS from the fancy hotel with a raging fire in the lobby.",
+  "cards": [
+    "The helicopter",
+    "over",
+    "the rooftop",
+    "is evacuating",
+    "POTUS",
+    "from the",
+    "fancy",
+    "hotel",
+    "with",
+    "a raging fire",
+    "in",
+    "the lobby."
+  ],
+  "prompt": "Up or down?",
+  "choices": [
+    "Up!",
+    "Down!"
+  ],
+  "correctChoice": 0,
+  "outcomes": [
+    "You lead POTUS up the stairs to the roof, where Air Force One whisks them away to safety.",
+    "You storm into the ground floor, leading POTUS into dire circumstances."
+  ]
+}, {
   "rawSentence": "There is red hot fire on the rooftop of the fancy hotel and the lobby is the only exit",
   "cards": [
     "There is",
