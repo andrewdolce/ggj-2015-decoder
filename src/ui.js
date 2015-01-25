@@ -10,11 +10,21 @@
       .find('.dc-card')
       .addClass('dc-active-card');
 
-    this.$continueButton
-      .addClass('btn-danger')
-      .removeClass('btn-success');
+    this.$disableButton();
 
     $('#decks-root').prepend($('#board'));
+  };
+
+  MidTurnController.prototype.$enableButton = function() {
+    return this.$continueButton
+      .attr('disabled', false)
+      .text('Confirm');
+  };
+
+  MidTurnController.prototype.$disableButton = function() {
+    return this.$continueButton
+      .attr('disabled', true)
+      .text('Drag a fragment up');
   };
 
   // Put a card from hand into board. Has not confirmed yet.
@@ -29,9 +39,7 @@
       });
 
       var self = this;
-      this.$continueButton
-        .removeClass('btn-danger')
-        .addClass('btn-success')
+      this.$enableButton()
         .on('click', this._confirmCard.bind(this, card));
     }
 
@@ -61,10 +69,7 @@
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.unlockFromProposal();
       });
-      this.$continueButton
-        .addClass('btn-danger')
-        .removeClass('btn-success')
-        .off('click');
+      this.$disableButton().off('click');
     } else {
       $(sender).sortable('cancel');
     }
@@ -77,10 +82,12 @@
     this.$deckRoots = null;
     this.$preturn  = $('#dc-preturn');
     this.$midturn  = $('#dc-midturn');
+    this.$postturn = $('#dc-postturn');
     this.$finalchoice = $('#dc-finalchoice');
     this.$results = $('#dc-results');
     this.$screens = this.$preturn
       .add(this.$midturn)
+      .add(this.$postturn)
       .add(this.$finalchoice)
       .add(this.$results);
     this.cardViews = [];
@@ -88,8 +95,7 @@
     this._initDecks();
     this._init();
 
-    this.$screens.hide();
-    this.$currentScreen = null;
+    this.$currentScreen = this.$preturn;
   };
 
   UI.RETARGET_ROOT_ELEMENT = UI.prototype.RETARGET_ROOT_ELEMENT = 'ol';
@@ -221,6 +227,9 @@
     var preturnSource = $('#game-preturn-template').html();
     var preturnTemplate = Handlebars.compile(preturnSource);
 
+    var postturnSource = $('#game-postturn-template').html();
+    var postturnTemplate = Handlebars.compile(postturnSource);
+
     var finalchoiceSource = $('#game-finalchoice-template').html();
     var finalchoiceTemplate = Handlebars.compile(finalchoiceSource);
 
@@ -238,28 +247,40 @@
       case Game.State.PreTurn:
         this.showScreen(this.$preturn).then(function() {
           this.$playerDecks.addClass('dc-inactive-player');
+
+          var turnsLeftMessage;
+          var turnsLeft = game.numberOfTurnsLeft();
+          if (turnsLeft > 1) {
+            turnsLeftMessage = 'You have ' + turnsLeft + ' turns left to decide.';
+          } else {
+            turnsLeftMessage = 'Last turn!';
+          }
+
+          this.$preturn.html(preturnTemplate({
+            turnsLeftMessage: turnsLeftMessage,
+            currentSentence: game.currentSentence(),
+            prompt: game.get('scenario').get('prompt'),
+            playerNumber: currentPlayerId + 1
+          }));
+          $('#preturn-button').on('click', game.beginMidTurn.bind(game));
         }.bind(this));
-
-        var turnsLeftMessage;
-        var turnsLeft = game.numberOfTurnsLeft();
-        if (turnsLeft > 1) {
-          turnsLeftMessage = 'You have ' + turnsLeft + ' turns left to decide.';
-        } else {
-          turnsLeftMessage = 'Last turn!';
-        }
-
-        this.$preturn.html(preturnTemplate({
-          turnsLeftMessage: turnsLeftMessage,
-          currentSentence: game.currentSentence(),
-          prompt: game.get('scenario').get('prompt'),
-          playerNumber: currentPlayerId + 1
-        }));
-        $('#preturn-button').on('click', game.beginMidTurn.bind(game));
         break;
 
       case Game.State.MidTurn:
         this.midTurnController = new MidTurnController(this, currentPlayerId);
         this.showScreen(this.$midturn);
+        break;
+
+      case Game.State.PostTurn:
+        this.showScreen(this.$postturn).then(function() {
+          this.$postturn.html(postturnTemplate());
+          this.$postturn.prepend($('#board'));
+          this.$deckRoots.sortable('disable');
+          $('#postturn-button').on('click', function() {
+            this.$deckRoots.sortable('enable');
+            game.beginPreTurn();
+          }.bind(this));
+        }.bind(this));
         break;
 
       case Game.State.FinalChoice:
