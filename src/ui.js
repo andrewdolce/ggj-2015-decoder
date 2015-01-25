@@ -80,6 +80,7 @@
     this.midTurnController = null;
     this.$decks = null;
     this.$deckRoots = null;
+    this.$initialprompt = $('#dc-initialprompt');
     this.$preturn  = $('#dc-preturn');
     this.$midturn  = $('#dc-midturn');
     this.$postturn = $('#dc-postturn');
@@ -224,6 +225,9 @@
   };
 
   UI.prototype.transitionViews = (function() {
+    var initialpromptSource = $('#game-initialprompt-template').html();
+    var initialpromptTemplate = Handlebars.compile(initialpromptSource);
+
     var preturnSource = $('#game-preturn-template').html();
     var preturnTemplate = Handlebars.compile(preturnSource);
 
@@ -244,20 +248,31 @@
       }
 
       switch (state) {
+      case Game.State.ShowScenarioChoices:
+        this.showScreen(this.$initialprompt).then(function() {
+          this.$initialprompt.html(initialpromptTemplate({
+            prompt: game.get('scenario').get('prompt'),
+            rounds: game.numberOfRounds()
+          }));
+          $('#initialprompt-button').on('click', game.beginNextTurn.bind(game));
+        }.bind(this));
+        break;
+
       case Game.State.PreTurn:
         this.showScreen(this.$preturn).then(function() {
           this.$playerDecks.addClass('dc-inactive-player');
 
-          var turnsLeftMessage;
-          var turnsLeft = game.numberOfTurnsLeft();
-          if (turnsLeft > 1) {
-            turnsLeftMessage = 'You have ' + turnsLeft + ' turns left to decide.';
+          var roundsMessage;
+          var currentRound = game.currentRound();
+          var numberOfRounds = game.numberOfRounds();
+          if (currentRound < numberOfRounds) {
+            roundsMessage = 'Round ' + currentRound + ' of ' + game.numberOfRounds();
           } else {
-            turnsLeftMessage = 'Last turn!';
+            roundsMessage = 'Last round!';
           }
 
           this.$preturn.html(preturnTemplate({
-            turnsLeftMessage: turnsLeftMessage,
+            roundsMessage: roundsMessage,
             currentSentence: game.currentSentence(),
             prompt: game.get('scenario').get('prompt'),
             playerNumber: currentPlayerId + 1
@@ -273,8 +288,10 @@
 
       case Game.State.PostTurn:
         this.showScreen(this.$postturn).then(function() {
-          this.$postturn.html(postturnTemplate());
-          this.$postturn.prepend($('#board'));
+          this.$postturn.html(postturnTemplate({
+            prompt: game.get('scenario').get('prompt')
+          }));
+          this.$postturn.find('#post-turn-board-root').prepend($('#board'));
           this.$deckRoots.sortable('disable');
           $('#postturn-button').on('click', function() {
             this.$deckRoots.sortable('enable');

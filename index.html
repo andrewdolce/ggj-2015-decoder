@@ -13,6 +13,8 @@
   </head>
   <body>
     <div class="container" role="main">
+      <div id="dc-initialprompt">
+      </div>
       <div id="dc-preturn">
         <h1>Loading...</h1>
       </div>
@@ -56,20 +58,25 @@
       </div>
     </script>
 
+    <script id="game-initialprompt-template" type="text/x-handlebars-template">
+        <h1>Calling all neurons!</h1>
+        <p>Piece together the situation, then choose:</p>
+        <p class="dc-big-instructions">{{prompt}}</p>
+        <p>You have {{rounds}} rounds to decide!</p>
+        <button id="initialprompt-button" class="btn btn-lg btn-default">Begin</button>
+    </script>
+
     <script id="game-preturn-template" type="text/x-handlebars-template">
-      {{#if currentSentence}}
-      <div class="well">
-        <h1 class="dc-hide-case">{{currentSentence}}</h1>
-      </div>
-      {{/if}}
-      <h1><em>{{prompt}}</em></h1>
-      <h1>{{turnsLeftMessage}}</h1>
-      <h1>Player {{playerNumber}} is next! All other players look away now! No peeking!</h1>
+      <p>{{roundsMessage}}</p>
+      <p class="dc-big-instructions">Player {{playerNumber}} is next!</p>
+      <p class="dc-big-instructions"><b>All other players look away now! No peeking!</b></p>
       <button id="preturn-button" class="btn btn-lg btn-default">Continue</button>
     </script>
 
     <script id="game-postturn-template" type="text/x-handlebars-template">
-      <p>Show everybody the sentence!</p>
+      <p class="dc-big-instructions"><b>Show everybody the sentence!</b></p>
+      <div id="post-turn-board-root"></div>
+      <p class="dc-big-instructions">{{prompt}}</p>
       <button id="postturn-button" class="btn btn-lg btn-default">Continue</button>
     </script>
 
@@ -92,7 +99,7 @@
         <p>{{outcome}}</p>
       </div>
       <h2>You came up with:</h2>
-      <h2><span class="label label-default dc-hide-case">{{actual}}</span></h2>
+      <h2><span id="results-final-sentence" class="label label-default dc-hide-case">{{actual}}</span></h2>
     </script>
 
     <!-- Model -->

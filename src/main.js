@@ -25,7 +25,6 @@
       if (state == Game.State.PlayerSetup) {
         game.finishPlayerSetup(3);
       } else if (state == Game.State.ShowScenarioChoices) {
-        game.beginNextTurn();
       } else if (state == Game.State.PreTurn) {
       } else if (state == Game.State.MidTurn) {
       } else if (state == Game.State.OpinionPhase) {
