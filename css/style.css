@@ -59,3 +59,8 @@ ul.dc-deck-root {
 #dc-results h1 {
     font-variant: small-caps;
 }
+
+#results-final-sentence {
+    display: inline-block;
+    white-space: normal;
+}
