@@ -9,8 +9,9 @@
       "cards": [],
       "prompt": "Should we run?",
       "choices": [ "Run!", "Don't run!" ],
+      "correctChoice": 1,
       "outcomes": [ "You run. The dinosaur chases you down and eats you!",
-                    "You do not run. The dinosaur doesn't see you, and wonders off."
+                    "You do not run. The dinosaur doesn't see you, and wanders off."
                   ]
     },
 

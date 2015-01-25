@@ -25,6 +25,8 @@
       </div>
       <div id="dc-finalchoice">
       </div>
+      <div id="dc-results">
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.js"></script>
@@ -64,6 +66,17 @@
         <button id="button-choice-a" class="btn dc-btn-humongous btn-primary dc-btn-finalchoice">{{choiceA}}</button>
         <button id="button-choice-b" class="btn dc-btn-humongous btn-success dc-btn-finalchoice">{{choiceB}}</button>
       </div>
+    </script>
+
+    <script id="game-results-template" type="text/x-handlebars-template">
+      {{#if success}}
+      <h1>AW YEAH</h1>
+      {{else}}
+      <h1>OH NOES</h1>
+      {{/if}}
+      <p>{{outcome}}</p>
+      <p>{{expected}}</p>
+      <p>{{actual}}</p>
     </script>
 
     <!-- Model -->

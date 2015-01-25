@@ -27,19 +27,20 @@
       "currentTurn": -1,
       "scenario": undefined,
       "cardsOnBoard": [],
-      "state": State.Uninitialized
+      "state": State.Uninitialized,
+      "finalChoice": 0
     },
 
     // Accessors
     currentPlayer: function() {
-      var turn = this.get( "currentTurn" );
-      var players = this.get( "players" );
+      var turn = this.get("currentTurn");
+      var players = this.get("players");
       var currentPlayerIndex = turn % players.length;
       return players[ currentPlayerIndex ];
     },
 
     currentSentence: function() {
-      var cards = this.get( 'cardsOnBoard' );
+      var cards = this.get('cardsOnBoard');
       return cards
         .map(function(card) {
           return card.get('text');
@@ -53,10 +54,10 @@
 
     // State changes
     beginPlayerSetup: function() {
-      this.set( "state", Game.State.PlayerSetup );
+      this.set("state", Game.State.PlayerSetup);
     },
 
-    finishPlayerSetup: function( numberOfPlayers ) {
+    finishPlayerSetup: function(numberOfPlayers) {
       var numberOfTurns = numberOfPlayers * 3; // Decide how we determine this
 
       var scenario = new Scenario();
@@ -77,14 +78,14 @@
         scenario: scenario
       });
 
-      this.set( "state", Game.State.ShowScenarioChoices );
+      this.set("state", Game.State.ShowScenarioChoices);
     },
 
     beginNextTurn: function() {
-      var turn = this.get( "currentTurn" ) + 1;
-      this.set( "currentTurn", turn );
+      var turn = this.get("currentTurn") + 1;
+      this.set("currentTurn", turn);
 
-      if ( turn < this.get( "numberOfTurns" )) {
+      if (turn < this.get("numberOfTurns")) {
         this.beginPreTurn();
       } else {
         // this.beginOpinionPhase();
@@ -93,35 +94,36 @@
     },
 
     beginPreTurn: function() {
-      this.set( "state", Game.State.PreTurn );
+      this.set("state", Game.State.PreTurn);
     },
 
     beginMidTurn: function() {
       // Not sure that we need anything else here
-      this.set( "state", Game.State.MidTurn );
+      this.set("state", Game.State.MidTurn);
     },
 
-    finalizeTurn: function( sharedCard, cardsOnBoard ) {
+    finalizeTurn: function(sharedCard, cardsOnBoard) {
       var player = this.currentPlayer();
-      player.playCardFromHand( sharedCard );
-      this.set( "cardsOnBoard", cardsOnBoard );
+      player.playCardFromHand(sharedCard);
+      this.set("cardsOnBoard", cardsOnBoard);
       this.beginNextTurn();
     },
 
     beginOpinionPhase: function() {
-      this.set( "state", Game.State.OpinionPhase );
+      this.set("state", Game.State.OpinionPhase);
     },
 
     beginVotingPhase: function() {
-      this.set( "state", Game.State.VotingPhase );
+      this.set("state", Game.State.VotingPhase);
     },
 
     beginFinalChoice: function() {
-      this.set( "state", Game.State.FinalChoice );
+      this.set("state", Game.State.FinalChoice);
     },
 
-    lockInDecision: function( choice ) {
-      this.set( "state", Game.State.GameEnd );
+    lockInDecision: function(choice) {
+      this.set('finalChoice', choice);
+      this.set("state", Game.State.GameEnd);
     }
   });
 
