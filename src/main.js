@@ -34,5 +34,7 @@
     }, 50);
   });
 
-  game.beginPlayerSetup();
+  $.when(game.loaded).then(function(game) {
+    game.beginPlayerSetup();
+  });
 }());
