@@ -239,7 +239,7 @@
         var turnsLeftMessage;
         var turnsLeft = game.numberOfTurnsLeft();
         if (turnsLeft > 1) {
-          turnsLeftMessage = 'Only ' + turnsLeft + ' turns left.';
+          turnsLeftMessage = 'You have ' + turnsLeft + ' turns left to decide.';
         } else {
           turnsLeftMessage = 'Last turn!';
         }
