@@ -13,6 +13,8 @@
     this.$continueButton
       .addClass('btn-danger')
       .removeClass('btn-success');
+
+    $('#decks-root').prepend($('#board'));
   };
 
   // Put a card from hand into board. Has not confirmed yet.
@@ -147,7 +149,6 @@
         this._initCards();
       }
     }, this);
-    // this.game.on('change:state', this.syncCards, this);
     this.game.on('change:state', this.transitionViews, this);
   };
 
@@ -199,12 +200,11 @@
     }));
   };
 
-  UI.prototype.showScreen = function(screen, hidePlayers) {
+  UI.prototype.showScreen = function(screen) {
+    var deferred = new $.Deferred();
     var fadeInScreen = function() {
+      deferred.resolve();
       this.syncCards();
-      if (hidePlayers) {
-        this.$playerDecks.addClass('dc-inactive-player');
-      }
       this.$currentScreen = $(screen).fadeIn(300);
     }.bind(this);
 
@@ -213,6 +213,8 @@
     } else {
       fadeInScreen();
     }
+
+    return deferred;
   };
 
   UI.prototype.transitionViews = (function() {
@@ -234,7 +236,9 @@
 
       switch (state) {
       case Game.State.PreTurn:
-        this.showScreen(this.$preturn, true);
+        this.showScreen(this.$preturn).then(function() {
+          this.$playerDecks.addClass('dc-inactive-player');
+        }.bind(this));
 
         var turnsLeftMessage;
         var turnsLeft = game.numberOfTurnsLeft();
@@ -267,7 +271,10 @@
         }));
         $('#button-choice-a').on('click', game.lockInDecision.bind(game, 0));
         $('#button-choice-b').on('click', game.lockInDecision.bind(game, 1));
-        this.showScreen(this.$finalchoice);
+        this.showScreen(this.$finalchoice).then(function() {
+          this.$deckRoots.sortable('disable');
+          this.$finalchoice.prepend($('#board'));
+        }.bind(this));
         break;
 
       case Game.State.GameEnd:
