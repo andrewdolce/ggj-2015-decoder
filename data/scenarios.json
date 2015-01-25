@@ -161,17 +161,4 @@
     "What a find! You make a million dollars selling it to Hollywood as a prop for that new dinosaur movie.",
     "You hurl the priceless fossil awkwardly across the field. It bounces into a wood chipper and is destroyer forever."
   ]
-}, {
-}, {
-  "rawSentence": "This is a test sentence.",
-  "prompt": "What do?",
-  "choices": [
-    "French fries",
-    "Pizza"
-  ],
-  "correctChoice": 1,
-  "outcomes": [
-    "You french-fried when you should have pizza'd.",
-    "You pizza your way down the hill."
-  ]
 }]
