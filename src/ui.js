@@ -9,6 +9,10 @@
       .removeClass('dc-inactive-player')
       .find('.dc-card')
       .addClass('dc-active-card');
+
+    this.$continueButton
+      .addClass('btn-danger')
+      .removeClass('btn-success');
   };
 
   // Put a card from hand into board. Has not confirmed yet.
@@ -20,17 +24,20 @@
       });
 
       var self = this;
-      this.$continueButton.on('click', function() {
-        var game = self.ui.game;
+      this.$continueButton
+        .removeClass('btn-danger')
+        .addClass('btn-success')
+        .on('click', function() {
+          var game = self.ui.game;
 
-        var order = [];
-        $('#board .dc-card').each(function(index, el) {
-          order.push(el.__cardView.model);
+          var order = [];
+          $('#board .dc-card').each(function(index, el) {
+            order.push(el.__cardView.model);
+          });
+          game.finalizeTurn(card, order);
+          $(this).off('click');
+          self.ui.midTurnController = null;
         });
-        game.finalizeTurn(card, order);
-        $(this).off('click');
-        self.ui.midTurnController = null;
-      });
     }
 
     // Reject card if not an active card. That means we already
@@ -45,7 +52,10 @@
       this.ui.$playerDecks.find('.dc-card').each(function(index, el) {
         el.__cardView.unlockFromProposal();
       });
-      this.$continueButton.off('click');
+      this.$continueButton
+        .addClass('btn-danger')
+        .removeClass('btn-success')
+        .off('click');
     }
   };
 
