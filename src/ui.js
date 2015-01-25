@@ -30,18 +30,7 @@
       this.$continueButton
         .removeClass('btn-danger')
         .addClass('btn-success')
-        .on('click', function() {
-          var game = self.ui.game;
-
-          var order = [];
-          $('#board .dc-card').each(function(index, el) {
-            order.push(el.__cardView.model);
-          });
-          game.finalizeTurn(card, order);
-          self.ui.$decks.find('.dc-card').removeClass('dc-active-card');
-          $(this).off('click');
-          self.ui.midTurnController = null;
-        });
+        .on('click', this._confirmCard.bind(this, card));
     }
 
     // Reject card if not an active card. That means we already
@@ -50,6 +39,19 @@
       $(sender).sortable('cancel');
     }
   };
+
+  MidTurnController.prototype._confirmCard = function(card) {
+    var game = this.ui.game;
+
+    var order = [];
+    $('#board .dc-card').each(function(index, el) {
+      order.push(el.__cardView.model);
+    });
+    game.finalizeTurn(card, order);
+    this.ui.$decks.find('.dc-card').removeClass('dc-active-card');
+    this.$continueButton.off('click');
+    this.ui.midTurnController = null;
+  },
 
   MidTurnController.prototype.returnCard = function($card, sender) {
     if ($card.hasClass('dc-active-card')) {
@@ -75,10 +77,17 @@
     this.$midturn  = $('#dc-midturn');
     this.$finalchoice = $('#dc-finalchoice');
     this.$results = $('#dc-results');
+    this.$screens = this.$preturn
+      .add(this.$midturn)
+      .add(this.$finalchoice)
+      .add(this.$results);
     this.cardViews = [];
 
     this._initDecks();
     this._init();
+
+    this.$screens.hide();
+    this.$currentScreen = null;
   };
 
   UI.RETARGET_ROOT_ELEMENT = UI.prototype.RETARGET_ROOT_ELEMENT = 'ol';
@@ -138,7 +147,7 @@
         this._initCards();
       }
     }, this);
-    this.game.on('change:state', this.syncCards, this);
+    // this.game.on('change:state', this.syncCards, this);
     this.game.on('change:state', this.transitionViews, this);
   };
 
@@ -190,6 +199,22 @@
     }));
   };
 
+  UI.prototype.showScreen = function(screen, hidePlayers) {
+    var fadeInScreen = function() {
+      this.syncCards();
+      if (hidePlayers) {
+        this.$playerDecks.addClass('dc-inactive-player');
+      }
+      this.$currentScreen = $(screen).fadeIn(300);
+    }.bind(this);
+
+    if (this.$currentScreen) {
+      this.$currentScreen.fadeOut(300, fadeInScreen);
+    } else {
+      fadeInScreen();
+    }
+  };
+
   UI.prototype.transitionViews = (function() {
     var preturnSource = $('#game-preturn-template').html();
     var preturnTemplate = Handlebars.compile(preturnSource);
@@ -209,8 +234,7 @@
 
       switch (state) {
       case Game.State.PreTurn:
-        this.$midturn.addClass('dc-inactive-turn-ui');
-        this.$preturn.removeClass('dc-inactive-turn-ui');
+        this.showScreen(this.$preturn, true);
 
         var turnsLeftMessage;
         var turnsLeft = game.numberOfTurnsLeft();
@@ -223,17 +247,15 @@
         this.$preturn.html(preturnTemplate({
           turnsLeftMessage: turnsLeftMessage,
           currentSentence: game.currentSentence(),
-          prompt: game.get( 'scenario' ).get( 'prompt' ),
+          prompt: game.get('scenario').get('prompt'),
           playerNumber: currentPlayerId + 1
         }));
-        $('#preturn-button').on( 'click', game.beginMidTurn.bind(game));
-        this.$playerDecks.addClass('dc-inactive-player');
+        $('#preturn-button').on('click', game.beginMidTurn.bind(game));
         break;
 
       case Game.State.MidTurn:
         this.midTurnController = new MidTurnController(this, currentPlayerId);
-        this.$preturn.addClass('dc-inactive-turn-ui');
-        this.$midturn.removeClass('dc-inactive-turn-ui');
+        this.showScreen(this.$midturn);
         break;
 
       case Game.State.FinalChoice:
@@ -243,10 +265,9 @@
           choiceA: choices[0],
           choiceB: choices[1]
         }));
-        $('#button-choice-a').on( 'click', game.lockInDecision.bind(game, 0));
-        $('#button-choice-b').on( 'click', game.lockInDecision.bind(game, 1));
-        this.$midturn.addClass('dc-inactive-turn-ui');
-        this.$finalchoice.removeClass('dc-inactive-turn-ui');
+        $('#button-choice-a').on('click', game.lockInDecision.bind(game, 0));
+        $('#button-choice-b').on('click', game.lockInDecision.bind(game, 1));
+        this.showScreen(this.$finalchoice);
         break;
 
       case Game.State.GameEnd:
@@ -257,8 +278,7 @@
           expected: game.get('scenario').get('rawSentence'),
           actual: game.currentSentence()
         }));
-        this.$finalchoice.addClass('dc-inactive-turn-ui');
-        this.$results.removeClass('dc-inactive-turn-ui');
+        this.showScreen(this.$results);
         break;
       } // switch
     };
