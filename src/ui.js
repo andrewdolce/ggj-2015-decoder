@@ -80,6 +80,7 @@
     this.midTurnController = null;
     this.$decks = null;
     this.$deckRoots = null;
+    this.$initialprompt = $('#dc-initialprompt');
     this.$preturn  = $('#dc-preturn');
     this.$midturn  = $('#dc-midturn');
     this.$postturn = $('#dc-postturn');
@@ -224,6 +225,9 @@
   };
 
   UI.prototype.transitionViews = (function() {
+    var initialpromptSource = $('#game-initialprompt-template').html();
+    var initialpromptTemplate = Handlebars.compile(initialpromptSource);
+
     var preturnSource = $('#game-preturn-template').html();
     var preturnTemplate = Handlebars.compile(preturnSource);
 
@@ -244,6 +248,16 @@
       }
 
       switch (state) {
+      case Game.State.ShowScenarioChoices:
+        this.showScreen(this.$initialprompt).then(function() {
+          this.$initialprompt.html(initialpromptTemplate({
+            prompt: game.get('scenario').get('prompt'),
+            rounds: game.numberOfRounds()
+          }));
+          $('#initialprompt-button').on('click', game.beginNextTurn.bind(game));
+        }.bind(this));
+        break;
+
       case Game.State.PreTurn:
         this.showScreen(this.$preturn).then(function() {
           this.$playerDecks.addClass('dc-inactive-player');

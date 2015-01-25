@@ -13,6 +13,8 @@
   </head>
   <body>
     <div class="container" role="main">
+      <div id="dc-initialprompt">
+      </div>
       <div id="dc-preturn">
         <h1>Loading...</h1>
       </div>
@@ -54,6 +56,14 @@
       <div id="player-{{identifier}}" class="dc-deck-container dc-player-hand">
         <ol class="jumbotron"></ol>
       </div>
+    </script>
+
+    <script id="game-initialprompt-template" type="text/x-handlebars-template">
+        <h1>Calling all neurons!</h1>
+        <p>Piece together the situation, then choose:</p>
+        <p class="dc-big-instructions">{{prompt}}</p>
+        <p>You have {{rounds}} rounds to decide!</p>
+        <button id="initialprompt-button" class="btn btn-lg btn-default">Begin</button>
     </script>
 
     <script id="game-preturn-template" type="text/x-handlebars-template">
