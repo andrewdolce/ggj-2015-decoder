@@ -1,0 +1,51 @@
+[{
+  "rawSentence": "The dinosaur is vicious, hungry, and very fast, but it can only see things that are moving.",
+  "cards": [
+    "The",
+    "dinosaur",
+    "is",
+    "vicious",
+    "hungry",
+    "and",
+    "very",
+    "fast",
+    "but",
+    "it",
+    "can",
+    "only",
+    "see",
+    "things",
+    "that",
+    "are",
+    "moving"
+  ],
+  "prompt": "Should we run?",
+  "choices": [
+    "Run!",
+    "Don't run!"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "You run. The dinosaur chases you down and eats you!",
+    "You do not run. The dinosaur doesn't see you, and wanders off."
+  ]
+}, {
+  "rawSentence": "This is a test sentence.",
+  "cards": [
+    "This",
+    "is",
+    "a",
+    "test",
+    "sentence"
+  ],
+  "prompt": "What do?",
+  "choices": [
+    "French fries",
+    "Pizza"
+  ],
+  "correctChoice": 1,
+  "outcomes": [
+    "You french-fried when you should have pizza'd.",
+    "You pizza your way down the hill."
+  ]
+}]

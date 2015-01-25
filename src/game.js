@@ -1,16 +1,17 @@
 (function() {
 
   // Set up State enum
-  var states = [ "Uninitialized",
-                 "PlayerSetup",
-                 "ShowScenarioChoices",
-                 "PreTurn",
-                 "MidTurn",
-                 "OpinionPhase",
-                 "VotingPhase",
-                 "FinalChoice",
-                 "GameEnd"
-               ];
+  var states = [
+    "Uninitialized",
+    "PlayerSetup",
+    "ShowScenarioChoices",
+    "PreTurn",
+    "MidTurn",
+    "OpinionPhase",
+    "VotingPhase",
+    "FinalChoice",
+    "GameEnd"
+  ];
 
   var State = {};
   for (var i = 0; i < states.length; i++) {
@@ -25,10 +26,19 @@
       "players": [],
       "numberOfTurns": 0,
       "currentTurn": -1,
+      "scenarioId": -1,
       "scenario": undefined,
       "cardsOnBoard": [],
       "state": State.Uninitialized,
       "finalChoice": 0
+    },
+
+    constructor: function() {
+      var self = this;
+      $.getJSON('data/scenarios.json', function(data) {
+        self.scenarioDB = data;
+      });
+      Backbone.Model.apply(this, arguments);
     },
 
     // Accessors
@@ -60,7 +70,12 @@
     finishPlayerSetup: function(numberOfPlayers) {
       var numberOfTurns = numberOfPlayers * 3; // Decide how we determine this
 
-      var scenario = new Scenario();
+      var scenarioId = this.get('scenarioId');
+      if (scenarioId === -1) {
+        scenarioId = (Math.random() * this.scenarioDB.length) | 0;
+      }
+
+      var scenario = new Scenario(this.scenarioDB[scenarioId]);
       var cardGroups = scenario.generateCardGroups(numberOfPlayers);
 
       var players = [];
